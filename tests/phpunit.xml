@@ -2,6 +2,7 @@
     <testsuites>
         <testsuite name="Controllers">
             <file>./controllers/MockTest.php</file>
+            <file>./controllers/MockSaveResponseTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>
