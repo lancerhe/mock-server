@@ -21,7 +21,8 @@
     <div>
       <h3>Create a mock response.</h3>
     </div>
-    <form class="form-horizontal" method="post" action="/mock/createmockresponse">
+    <form class="form-horizontal" method="post" action="/mock/savemockresponse">
+      <input type="hidden" name="id" value="<?php echo $mock['id']?>" />
       <div class="form-group">
         <label for="txt-uri" class="col-sm-2 control-label">Uri</label>
         <div class="col-sm-6">
@@ -35,55 +36,67 @@
         </div>
       </div>
 
-      <div id="div-request-query" class="form-group">
-        <label for="txt-request-query" class="col-sm-2 control-label">Request Query</label>
+      <?php $idx = 0;foreach($request_query as $key => $value): ?>
+      <div <?php if ( ! $idx ) :?>id="div-request-query"<?php endif;?> class="form-group">
+        <label for="txt-request-query" class="col-sm-2 control-label"><?php if ( ! $idx ) :?>Request Query<?php endif;?></label>
         <div class="col-sm-2">
-          <input type="text" class="form-control" name="request_query_key[]" id="txt-request-query" placeholder="Key">
+          <input type="text" class="form-control" name="request_query_key[]" <?php if ( ! $idx ) :?>id="txt-request-query"<?php endif;?> placeholder="Key" value="<?php echo $key?>">
         </div>
         <div class="col-sm-4">
-          <input type="text" class="form-control" name="request_query_value[]" placeholder="Value">
+          <input type="text" class="form-control" name="request_query_value[]" placeholder="Value" value="<?php echo $value?>">
         </div>
+        <?php if ( ! $idx ) :?>
         <div class="col-sm-2">
           <a id="btn-add-request-query" class="btn btn-primary">Add One</a>
         </div>
+        <?php endif;?>
       </div>
+      <?php $idx++; endforeach;?>
 
-      <div id="div-request-post" class="form-group">
-        <label for="txt-request-post" class="col-sm-2 control-label">Request Post</label>
+      <?php $idx = 0;foreach($request_post as $key => $value): ?>
+      <div <?php if ( ! $idx ) :?>id="div-request-post"<?php endif;?> class="form-group">
+        <label for="txt-request-post" class="col-sm-2 control-label"><?php if ( ! $idx ) :?>Request Post<?php endif;?></label>
         <div class="col-sm-2">
-          <input type="text" class="form-control" name="request_post_key[]" id="txt-request-post" placeholder="Key">
+          <input type="text" class="form-control" name="request_post_key[]" <?php if ( ! $idx ) :?>id="txt-request-post"<?php endif;?> placeholder="Key" value="<?php echo $key?>">
         </div>
         <div class="col-sm-4">
-          <input type="text" class="form-control" name="request_post_value[]" placeholder="Value">
+          <input type="text" class="form-control" name="request_post_value[]" placeholder="Value" value="<?php echo $value?>">
         </div>
+        <?php if ( ! $idx ) :?>
         <div class="col-sm-2">
           <a id="btn-add-request-post" class="btn btn-primary">Add One</a>
         </div>
+        <?php endif;?>
       </div>
+      <?php $idx++; endforeach;?>
 
-      <div id="div-response-header" class="form-group">
-        <label for="txt-response-header" class="col-sm-2 control-label">Response Header</label>
+      <?php $idx = 0;foreach($response_header as $key => $value): ?>
+      <div <?php if ( ! $idx ) :?>id="div-response-header"<?php endif;?> class="form-group">
+        <label for="txt-response-header" class="col-sm-2 control-label"><?php if ( ! $idx ) :?>Response Header<?php endif;?></label>
         <div class="col-sm-2">
-          <input type="text" class="form-control" name="response_header_key[]" id="txt-response-header" placeholder="Key">
+          <input type="text" class="form-control" name="response_header_key[]" <?php if ( ! $idx ) :?>id="txt-response-header"<?php endif;?> placeholder="Key" value="<?php echo $key?>">
         </div>
         <div class="col-sm-4">
-          <input type="text" class="form-control" name="response_header_value[]" placeholder="Value">
+          <input type="text" class="form-control" name="response_header_value[]" placeholder="Value" value="<?php echo $value?>">
         </div>
+        <?php if ( ! $idx ) :?>
         <div class="col-sm-2">
           <a id="btn-add-response-header" class="btn btn-primary">Add One</a>
         </div>
+        <?php endif;?>
       </div>
+      <?php $idx++; endforeach;?>
 
       <div class="form-group">
         <label for="txt-response-body" class="col-sm-2 control-label">Response Body</label>
         <div class="col-sm-6">
-          <textarea class="form-control" rows="4" id="txt-response-body" name="response_body" placeholder='Like: {"username": "jerry"}'></textarea>
+          <textarea class="form-control" rows="4" id="txt-response-body" name="response_body" placeholder='Like: {"username": "jerry"}'><?php echo $response_body;?></textarea>
         </div>
       </div>
 
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-default">Sign in</button>
+          <button type="submit" class="btn btn-default">Save</button>
         </div>
       </div>
     </form>

@@ -50,6 +50,22 @@ class Mock extends \Core_Entity {
                 $this->_response_body;
     }
 
+    public function getRequestQuery() {
+        return $this->_request_query;
+    }
+
+    public function getRequestPost() {
+        return $this->_request_post;
+    }
+
+    public function getResponseHeader() {
+        return $this->_response_header;
+    }
+
+    public function getResponseBody() {
+        return $this->_response_body;
+    }
+
     public function setRequestQuery($request_query) {
         $this->_request_query = json_decode($request_query, true);
     }
@@ -66,13 +82,13 @@ class Mock extends \Core_Entity {
     }
 
     public function setRequestQueryByKeyAndValue($request_query_key, $request_query_value) {
-        foreach ($request_query_key as $idx => $key) 
-            $this->_request_query[$key] = $request_query_value[$idx];
+        foreach ($request_query_key as $idx => $key)
+            if ($key) $this->_request_query[$key] = $request_query_value[$idx];
     }
 
     public function setRequestPostByKeyAndValue($request_post_key, $request_post_value) {
         foreach ($request_post_key as $idx => $key) 
-            $this->_request_post[$key] = $request_post_value[$idx];
+            if ($key) $this->_request_post[$key] = $request_post_value[$idx];
 
         if ( ! empty($this->_request_post) ) {
             $this->_request_method = 'POST';
@@ -81,7 +97,7 @@ class Mock extends \Core_Entity {
 
     public function setResponseHeaderByKeyAndValue($response_header_key, $response_header_value) {
         foreach ($response_header_key as $idx => $key) 
-            $this->_response_header[$key] = $response_header_value[$idx];
+            if ($key) $this->_response_header[$key] = $response_header_value[$idx];
     }
 
     public function setResponseBody($response_body) {
@@ -102,7 +118,7 @@ class Mock extends \Core_Entity {
 
     public function create() {
         $Model  = new \Model_Uri();
-        if ( ! $uri_id = $Model->medoo()->insert('uri', ["uri" => $this->_ur]) ) {
+        if ( ! $uri_id = $Model->medoo()->insert('uri', ["uri" => $this->_uri]) ) {
             throw new Exception("Error Processing Request", 1);
         }
         $this->_uri_id = $uri_id;
@@ -116,5 +132,31 @@ class Mock extends \Core_Entity {
             "response_body"   => $this->_response_body,
             "timeout"         => $this->_timeout,
         ]);
+    }
+
+    public function save($id) {
+        $mock  = (new \Model_Mock())->fetchRowById($id);
+        if ( empty($mock) ) {
+            throw new Exception("Error Processing Request", 1);
+        }
+
+        $uri_id = (new \Model_Uri())->medoo()->select('uri', 'id', ["uri" => $this->_uri]);
+        $uri_id = isset($uri_id[0]) ? $uri_id[0] : false;
+        if ( ! $uri_id ) {
+            if ( ! $uri_id = (new \Model_Uri())->medoo()->insert('uri', ["uri" => $this->_uri]) ) {
+                throw new Exception("Error Processing Request", 1);
+            }
+        }
+
+        $this->_uri_id = $uri_id;
+        $Model = new \Model_Mock();
+        $mock_id  = $Model->medoo()->update('mock', [
+            "uri_id"          => $this->_uri_id,
+            "request_query"   => json_encode($this->_request_query),
+            "request_post"    => json_encode($this->_request_post),
+            "response_header" => json_encode($this->_response_header),
+            "response_body"   => $this->_response_body,
+            "timeout"         => $this->_timeout,
+        ], ["id" => $id] );
     }
 }
