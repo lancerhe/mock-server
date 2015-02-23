@@ -16,4 +16,18 @@ Class Model_Mock extends \Core\Model\Medoo {
         $rows = $this->medoo()->select('mock', ['id', 'uri_id', 'request_query', 'request_post', 'response_header', 'response_body', 'timeout'], ['id' => $id]);
         return isset($rows[0]) ? $rows[0] : [];
     }
+
+    public function insertRow($row) {
+        if ( ! $mock_id = $this->medoo()->insert('mock', $row) ) {
+            throw new \Core\Exception\DatabaseWriteException();
+        }
+        return $mock_id;
+    }
+
+    public function updateRowById($row, $id) {
+        if ( false === $affect = $this->medoo()->update('mock', $row, ["id" => $id]) ) {
+            throw new \Core\Exception\DatabaseWriteException();
+        }
+        return $affect;
+    }
 }

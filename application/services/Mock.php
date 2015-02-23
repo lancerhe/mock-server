@@ -116,10 +116,17 @@ class Mock extends \Core_Entity {
         $this->_uri_id = $uri_id;
     }
 
+    public function query($id) {
+        $mock  = (new \Model_Mock())->fetchRowById($id);
+        if ( empty($mock) ) {
+            throw new \Core\Exception\NotFoundRecordException();
+        }
+        return $mock;
+    }
+
     public function create() {
         $this->_uri_id = (new \Model_Uri())->createIfNotExist($this->_uri);
-
-        $mock_id  = (new \Model_Mock())->medoo()->insert('mock', [
+        $mock_id = (new \Model_Mock())->insertRow([
             "uri_id"          => $this->_uri_id,
             "request_query"   => json_encode($this->_request_query),
             "request_post"    => json_encode($this->_request_post),
@@ -130,19 +137,15 @@ class Mock extends \Core_Entity {
     }
 
     public function save($id) {
-        $mock  = (new \Model_Mock())->fetchRowById($id);
-        if ( empty($mock) ) {
-            throw new \Core\Exception\NotFoundRecordException();
-        }
-
+        $this->query($id);
         $this->_uri_id = (new \Model_Uri())->createIfNotExist($this->_uri);
-        $mock_id  = (new \Model_Mock())->medoo()->update('mock', [
+        $mock_id  = (new \Model_Mock())->updateRowById([
             "uri_id"          => $this->_uri_id,
             "request_query"   => json_encode($this->_request_query),
             "request_post"    => json_encode($this->_request_post),
             "response_header" => json_encode($this->_response_header),
             "response_body"   => $this->_response_body,
             "timeout"         => $this->_timeout,
-        ], ["id" => $id] );
+        ], $id);
     }
 }
