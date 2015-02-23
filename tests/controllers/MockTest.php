@@ -66,29 +66,4 @@ class MockTest extends Controller {
         $this->assertEquals('post', $this->getView()->request_post['key']);
         $this->assertEquals('/mock/api/testing', $this->getView()->uri['uri']);
     }
-
-    /**
-     * @test
-     */
-    public function CreateMockResponse() {
-        $this->createRequest("/mock/createmockresponse");
-        $this->setPost([
-            'uri'                   => '/api/new/testing',
-            'timeout'               => 2000,
-            'request_query_key'     => ["account", "uid"],
-            'request_query_value'   => ["LancerHe", "7"],
-            'request_post_key'      => ["action", "module"],
-            'request_post_value'    => ["save", "user"],
-            'response_header_key'   => ["Content-Type"],
-            'response_header_value' => ["text/html"],
-            'response_body'         => '{"type":"ajt"}',
-        ]);
-        $this->dispatch();
-
-        $row = $this->medoo()->select('mock', '*', ["ORDER" => 'id DESC', "LIMIT" => 1])[0];
-        $this->assertEquals('{"account":"LancerHe","uid":"7"}', $row['request_query']);
-        $this->assertEquals('{"action":"save","module":"user"}', $row['request_post']);
-        $this->assertEquals('{"Content-Type":"text\/html"}', $row['response_header']);
-        $this->assertEquals('{"type":"ajt"}', $row['response_body']);
-    }
 }

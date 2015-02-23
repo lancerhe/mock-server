@@ -117,14 +117,9 @@ class Mock extends \Core_Entity {
     }
 
     public function create() {
-        $Model  = new \Model_Uri();
-        if ( ! $uri_id = $Model->medoo()->insert('uri', ["uri" => $this->_uri]) ) {
-            throw new \Core\Exception\DatabaseWriteException();
-        }
-        $this->_uri_id = $uri_id;
+        $this->_uri_id = (new \Model_Uri())->createIfNotExist($this->_uri);
 
-        $Model = new \Model_Mock();
-        $mock_id  = $Model->medoo()->insert('mock', [
+        $mock_id  = (new \Model_Mock())->medoo()->insert('mock', [
             "uri_id"          => $this->_uri_id,
             "request_query"   => json_encode($this->_request_query),
             "request_post"    => json_encode($this->_request_post),
@@ -140,17 +135,8 @@ class Mock extends \Core_Entity {
             throw new \Core\Exception\NotFoundRecordException();
         }
 
-        $uri_id = (new \Model_Uri())->medoo()->select('uri', 'id', ["uri" => $this->_uri]);
-        $uri_id = isset($uri_id[0]) ? $uri_id[0] : false;
-        if ( ! $uri_id ) {
-            if ( ! $uri_id = (new \Model_Uri())->medoo()->insert('uri', ["uri" => $this->_uri]) ) {
-                throw new \Core\Exception\DatabaseWriteException();
-            }
-        }
-
-        $this->_uri_id = $uri_id;
-        $Model = new \Model_Mock();
-        $mock_id  = $Model->medoo()->update('mock', [
+        $this->_uri_id = (new \Model_Uri())->createIfNotExist($this->_uri);
+        $mock_id  = (new \Model_Mock())->medoo()->update('mock', [
             "uri_id"          => $this->_uri_id,
             "request_query"   => json_encode($this->_request_query),
             "request_post"    => json_encode($this->_request_post),

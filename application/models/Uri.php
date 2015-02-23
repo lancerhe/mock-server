@@ -16,4 +16,20 @@ Class Model_Uri extends \Core\Model\Medoo {
         $rows = $this->medoo()->select('uri', ['id', 'uri'], ['id' => $id]);
         return isset($rows[0]) ? $rows[0] : [];
     }
+
+    public function create($uri) {
+        if ( ! $uri_id = $this->medoo()->insert('uri', ["uri" => $uri]) ) {
+            throw new \Core\Exception\DatabaseWriteException();
+        }
+        return $uri_id;
+    }
+
+    public function createIfNotExist($uri) {
+        $row    = $this->medoo()->select('uri', 'id', ["uri" => $uri]);
+        $uri_id = isset($row[0]) ? $row[0] : false;
+        if ( $uri_id ) 
+            return $uri_id;
+
+        return $this->create($uri);
+    }
 }
