@@ -70,7 +70,7 @@ class MockTest extends Controller {
     /**
      * @test
      */
-    public function CreateMockResponseAction() {
+    public function CreateMockResponse() {
         $this->createRequest("/mock/createmockresponse");
         $this->setPost([
             'uri'                   => '/api/new/testing',
@@ -116,7 +116,7 @@ class MockTest extends Controller {
     /**
      * @test
      */
-    public function SaveMockResponseAction() {
+    public function SaveMockResponseWithCreateNewUri() {
         $this->createRequest("/mock/savemockresponse");
         $this->setPost([
             'id'                    => '2',
@@ -142,5 +142,32 @@ class MockTest extends Controller {
         $uri = $this->medoo()->select('uri', '*', ["id" => $mock['uri_id']])[0];
         
         $this->assertEquals('/api/new/testing', $uri['uri']);
+    }
+
+    /**
+     * @test
+     */
+    public function SaveMockResponseWithUseOldUri() {
+        $this->createRequest("/mock/savemockresponse");
+        $this->setPost([
+            'id'                    => '2',
+            'uri'                   => '/uri/api/testing',
+            'timeout'               => 2000,
+            'request_query_key'     => ["account", "uid"],
+            'request_query_value'   => ["LancerHe", "7"],
+            'request_post_key'      => ["action", "module"],
+            'request_post_value'    => ["save", "user"],
+            'response_header_key'   => ["Content-Type"],
+            'response_header_value' => ["text/html"],
+            'response_body'         => '{"type":"ajt"}',
+        ]);
+        $this->dispatch();
+
+        $mock = $this->medoo()->select('mock', '*', ["id" => '2'])[0];
+        $this->assertEquals('{"account":"LancerHe","uid":"7"}', $mock['request_query']);
+        $this->assertEquals('{"action":"save","module":"user"}', $mock['request_post']);
+        $this->assertEquals('{"Content-Type":"text\/html"}', $mock['response_header']);
+        $this->assertEquals('{"type":"ajt"}', $mock['response_body']);
+        $this->assertEquals('2', $mock['uri_id']);
     }
 }
