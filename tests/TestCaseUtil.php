@@ -28,7 +28,13 @@ class Medoo {
     }
 
     public function setUp() {
-        self::getInstance()->__setUpTestCaseInit();
+        $this->__truncateTestDatabase();
+    }
+
+    public function import($file) {
+        $sqls = $this->__parseSetupFile2SQL($file);
+        foreach ($sqls as $sql) 
+            $this->__Medoo->query($sql);
     }
 
     public function __call($func, $parameters){
@@ -70,7 +76,25 @@ class Medoo {
         \Core\Model\Medoo::$Medoo = $this->__Medoo;
     }
 
-    private function __setUpTestCaseInit() {
-        $this->__truncateTestDatabase();
+    private function __parseSetupFile2SQL($file) {
+        $setup_folder = ROOT_PATH . '/tests/setup/';
+        $sql_file     = $setup_folder . $file;
+        if ( ! file_exists($sql_file) ) {
+            trigger_error("Setup sql file not found. file: $sql_file");
+        }
+
+        $setup = file_get_contents( $sql_file );
+        $setup = str_replace(array("\n", "\r", PHP_EOL), '', $setup);
+        $lines = explode(";", $setup);
+
+        $sqls = array();
+        foreach ($lines as $sql) {
+            
+            if ( ! trim($sql) ) continue;
+            if ( '#' === substr($sql, 0, 1) ) continue;
+
+            $sqls[] = $sql; 
+        }
+        return $sqls;
     }
 }
