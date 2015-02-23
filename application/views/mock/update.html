@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="/static/styles/bootstrap.min.css">
+<link rel="stylesheet" href="/static/styles/bootstrap-theme.min.css">
+<title>Control Panel</title>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand">Control Panel</a>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="jumbotron">
+        <h2>Mock Server List</h2>
+    </div>
+    <div>
+      <h3>Create a mock response.</h3>
+    </div>
+    <form class="form-horizontal" method="post" action="/mock/createmockresponse">
+      <div class="form-group">
+        <label for="txt-uri" class="col-sm-2 control-label">Uri</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" id="txt-uri" name="uri" placeholder="Like: /api/singleproduction/info" value="<?php echo $uri['uri']?>">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="txt-timeout" class="col-sm-2 control-label">Timeout</label>
+        <div class="col-sm-2">
+          <input type="text" class="form-control" id="txt-timeout" name="timeout" placeholder="Timeout: 2000ms" value="<?php echo $mock['timeout']?>">
+        </div>
+      </div>
+
+      <div id="div-request-query" class="form-group">
+        <label for="txt-request-query" class="col-sm-2 control-label">Request Query</label>
+        <div class="col-sm-2">
+          <input type="text" class="form-control" name="request_query_key[]" id="txt-request-query" placeholder="Key">
+        </div>
+        <div class="col-sm-4">
+          <input type="text" class="form-control" name="request_query_value[]" placeholder="Value">
+        </div>
+        <div class="col-sm-2">
+          <a id="btn-add-request-query" class="btn btn-primary">Add One</a>
+        </div>
+      </div>
+
+      <div id="div-request-post" class="form-group">
+        <label for="txt-request-post" class="col-sm-2 control-label">Request Post</label>
+        <div class="col-sm-2">
+          <input type="text" class="form-control" name="request_post_key[]" id="txt-request-post" placeholder="Key">
+        </div>
+        <div class="col-sm-4">
+          <input type="text" class="form-control" name="request_post_value[]" placeholder="Value">
+        </div>
+        <div class="col-sm-2">
+          <a id="btn-add-request-post" class="btn btn-primary">Add One</a>
+        </div>
+      </div>
+
+      <div id="div-response-header" class="form-group">
+        <label for="txt-response-header" class="col-sm-2 control-label">Response Header</label>
+        <div class="col-sm-2">
+          <input type="text" class="form-control" name="response_header_key[]" id="txt-response-header" placeholder="Key">
+        </div>
+        <div class="col-sm-4">
+          <input type="text" class="form-control" name="response_header_value[]" placeholder="Value">
+        </div>
+        <div class="col-sm-2">
+          <a id="btn-add-response-header" class="btn btn-primary">Add One</a>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="txt-response-body" class="col-sm-2 control-label">Response Body</label>
+        <div class="col-sm-6">
+          <textarea class="form-control" rows="4" id="txt-response-body" name="response_body" placeholder='Like: {"username": "jerry"}'></textarea>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-default">Sign in</button>
+        </div>
+      </div>
+    </form>
+</div>
+<script src="/static/scripts/jquery.min.js"></script>
+<script src="/static/scripts/bootstrap.min.js"></script>
+<script src="/static/scripts/bootbox.min.js"></script>
+<script type="text/javascript">
+bootbox.loading = function() {
+    return bootbox.dialog({
+        closeButton: false,
+        message: '<div class="progress progress-striped active" style="margin:0"><div class="progress-bar progress-bar-success" style="width:100%"></div></div>'
+    });
+}
+jQuery("#btn-add-request-query").bind('click', function() {
+    var $group = jQuery("<div />").addClass("form-group");
+    var $input_key = jQuery('<input type="text" name="request_query_key[]" placeholder="Key" />').addClass("form-control");
+    var $input_value = jQuery('<input type="text" name="request_query_value[]" placeholder="Value" />').addClass("form-control");
+    $group.append( jQuery("<div />").addClass("col-sm-2") );
+    $group.append( jQuery("<div />").addClass("col-sm-2").append($input_key) );
+    $group.append( jQuery("<div />").addClass("col-sm-4").append($input_value) );
+    jQuery("#div-request-query").after($group);
+});
+
+jQuery("#btn-add-request-post").bind('click', function() {
+    var $group = jQuery("<div />").addClass("form-group");
+    var $input_key = jQuery('<input type="text" name="request_post_key[]" placeholder="Key" />').addClass("form-control");
+    var $input_value = jQuery('<input type="text" name="request_post_value[]" placeholder="Value" />').addClass("form-control");
+    $group.append( jQuery("<div />").addClass("col-sm-2") );
+    $group.append( jQuery("<div />").addClass("col-sm-2").append($input_key) );
+    $group.append( jQuery("<div />").addClass("col-sm-4").append($input_value) );
+    jQuery("#div-request-post").after($group);
+});
+
+jQuery("#btn-add-response-header").bind('click', function() {
+    var $group = jQuery("<div />").addClass("form-group");
+    var $input_key = jQuery('<input type="text" name="response_header_key[]" placeholder="Key" />').addClass("form-control");
+    var $input_value = jQuery('<input type="text" name="response_header_value[]" placeholder="Value" />').addClass("form-control");
+    $group.append( jQuery("<div />").addClass("col-sm-2") );
+    $group.append( jQuery("<div />").addClass("col-sm-2").append($input_key) );
+    $group.append( jQuery("<div />").addClass("col-sm-4").append($input_value) );
+    jQuery("#div-response-header").after($group);
+});
+</script>
+</body>
+</html>

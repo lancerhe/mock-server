@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="/static/styles/bootstrap.min.css">
+<link rel="stylesheet" href="/static/styles/bootstrap-theme.min.css">
+<title>Control Panel</title>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand">Control Panel</a>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="jumbotron">
+        <h2>Mock Server List</h2>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Mock Uri</th>
+          <th>Operation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($list as $uri) :?>
+        <tr>
+          <th scope="row">1</th>
+          <td><?php echo $uri['uri']?></td>
+          <td><a href="/index/list?id=<?php echo $uri['id']?>" class="btn btn-primary btn-xs">View</a></td>
+        </tr>
+        <?php endforeach;?>
+      </tbody>
+    </table>
+</div>
+<script src="/static/scripts/jquery.min.js"></script>
+<script src="/static/scripts/bootstrap.min.js"></script>
+<script src="/static/scripts/bootbox.min.js"></script>
+<script type="text/javascript">
+bootbox.loading = function() {
+    return bootbox.dialog({
+        closeButton: false,
+        message: '<div class="progress progress-striped active" style="margin:0"><div class="progress-bar progress-bar-success" style="width:100%"></div></div>'
+    });
+}
+</script>
+</body>
+</html>

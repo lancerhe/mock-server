@@ -1,0 +1,6 @@
+{
+    "require": {
+        "catfan/medoo": "dev-master"
+    }
+    , "minimum-stability": "stable"
+}

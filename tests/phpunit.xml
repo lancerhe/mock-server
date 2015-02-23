@@ -1,0 +1,7 @@
+<phpunit bootstrap="./TestCase.php">
+    <testsuites>
+        <testsuite name="Controllers">
+            <file>./controllers/MockTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>

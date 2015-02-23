@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="/static/styles/bootstrap.min.css">
+<link rel="stylesheet" href="/static/styles/bootstrap-theme.min.css">
+<title>Control Panel</title>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand">Control Panel</a>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="jumbotron">
+        <h2>Mock Server List</h2>
+    </div>
+    <div>
+      <a href="/mock/create?uri_id=<?php echo $uri['id']?>" class="pull-right btn btn-primary btn-xs">Create</a>
+      <h3>List mock responses for &lt;<mark><?php echo $uri['uri'];?></mark>&gt;</h3>
+    </div>
+    <?php foreach ($list as $mock) :?>
+    <pre>
+<b>Request</b>
+<hr style="margin:0" />
+<?php echo $mock['http_request'];?>
+
+
+<b>Response</b><hr style="margin:0" />
+<?php echo $mock['http_response']?>
+    </pre>
+    <?php endforeach;?>
+</div>
+<script src="/static/scripts/jquery.min.js"></script>
+<script src="/static/scripts/bootstrap.min.js"></script>
+<script src="/static/scripts/bootbox.min.js"></script>
+<script type="text/javascript">
+bootbox.loading = function() {
+    return bootbox.dialog({
+        closeButton: false,
+        message: '<div class="progress progress-striped active" style="margin:0"><div class="progress-bar progress-bar-success" style="width:100%"></div></div>'
+    });
+}
+</script>
+</body>
+</html>
