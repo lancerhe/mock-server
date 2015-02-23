@@ -28,11 +28,14 @@ class Controller_Mock extends \Core\Controller\Main {
         $this->getView()->display('mock/list.html');
     }
 
-    public function CreateAction() {
-        $uri_id = intval( $this->getRequest()->getQuery('uri_id') );
+    public function GenerateAction() {
+        $uri_id = intval( $this->getRequest()->getQuery('id') );
 
-        $uri   = (new Model_Uri())->fetchRowById($uri_id);
-        $this->getView()->assign('uri', $uri);
+        $ServiceGenerator = new \Service\Mock\Generator($uri_id);
+        $ServiceGenerator->generate();
+    }
+
+    public function CreateAction() {
         $this->getView()->display('mock/create.html');
     }
 

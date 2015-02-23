@@ -66,6 +66,10 @@ class Mock extends \Core_Entity {
         return $this->_response_body;
     }
 
+    public function getTimeout() {
+        return $this->_timeout;
+    }
+
     public function setRequestQuery($request_query) {
         $this->_request_query = json_decode($request_query, true);
     }
