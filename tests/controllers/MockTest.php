@@ -95,6 +95,27 @@ class MockTest extends Controller {
     /**
      * @test
      */
+    public function SaveMockResponseNotFoundByQuery() {
+        $this->setExpectedException('\Core\Exception\NotFoundRecordException');
+        $this->createRequest("/mock/savemockresponse");
+        $this->setPost([
+            'id'                    => '99',
+            'uri'                   => '/api/new/testing',
+            'timeout'               => 2000,
+            'request_query_key'     => ["account", "uid"],
+            'request_query_value'   => ["LancerHe", "7"],
+            'request_post_key'      => ["action", "module"],
+            'request_post_value'    => ["save", "user"],
+            'response_header_key'   => ["Content-Type"],
+            'response_header_value' => ["text/html"],
+            'response_body'         => '{"type":"ajt"}',
+        ]);
+        $this->dispatch();
+    }
+
+    /**
+     * @test
+     */
     public function SaveMockResponseAction() {
         $this->createRequest("/mock/savemockresponse");
         $this->setPost([

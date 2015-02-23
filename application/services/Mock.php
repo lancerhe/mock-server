@@ -119,7 +119,7 @@ class Mock extends \Core_Entity {
     public function create() {
         $Model  = new \Model_Uri();
         if ( ! $uri_id = $Model->medoo()->insert('uri', ["uri" => $this->_uri]) ) {
-            throw new Exception("Error Processing Request", 1);
+            throw new \Core\Exception\DatabaseWriteException();
         }
         $this->_uri_id = $uri_id;
 
@@ -137,14 +137,14 @@ class Mock extends \Core_Entity {
     public function save($id) {
         $mock  = (new \Model_Mock())->fetchRowById($id);
         if ( empty($mock) ) {
-            throw new Exception("Error Processing Request", 1);
+            throw new \Core\Exception\NotFoundRecordException();
         }
 
         $uri_id = (new \Model_Uri())->medoo()->select('uri', 'id', ["uri" => $this->_uri]);
         $uri_id = isset($uri_id[0]) ? $uri_id[0] : false;
         if ( ! $uri_id ) {
             if ( ! $uri_id = (new \Model_Uri())->medoo()->insert('uri', ["uri" => $this->_uri]) ) {
-                throw new Exception("Error Processing Request", 1);
+                throw new \Core\Exception\DatabaseWriteException();
             }
         }
 
