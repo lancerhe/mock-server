@@ -29,9 +29,9 @@
       <tbody>
         <?php foreach ($list as $uri) :?>
         <tr>
-          <th scope="row">1</th>
+          <th scope="row"><?php echo $uri['id']?></th>
           <td><?php echo $uri['uri']?></td>
-          <td><a href="/index/list?id=<?php echo $uri['id']?>" class="btn btn-primary btn-xs">View</a></td>
+          <td><a href="/mock/list?id=<?php echo $uri['id']?>" class="btn btn-primary btn-xs">View</a></td>
         </tr>
         <?php endforeach;?>
       </tbody>
