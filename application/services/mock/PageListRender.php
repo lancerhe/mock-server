@@ -21,8 +21,9 @@ class PageListRender {
             $Mock = new \Service\Mock();
             $Mock->init($row, $this->_uri);
 
-            $this->_mock[$idx]['http_request']  = $Mock->getHttpRequestString();
-            $this->_mock[$idx]['http_response'] = $Mock->getHttpResponseString();
+            $ServiceHttpOutput = new \Service\Mock\OutputHtml($Mock);
+
+            $this->_mock[$idx]['output_http'] = $ServiceHttpOutput->output();
         }
     }
 

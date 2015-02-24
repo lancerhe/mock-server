@@ -22,34 +22,8 @@ class Mock extends \Core_Entity {
 
     protected $_timeout = 0;
 
-    public function getHttpRequestString() {
-        $uri = $this->_uri;
-        $request_body_string = '';
-        if ( ! empty( $this->_request_query ) ) {
-            $uri .= "?" . http_build_query($this->_request_query);
-        }
-        if ( ! empty( $this->_request_post ) ) {
-            $method = "POST";
-            $request_body_string = http_build_query($this->_request_post);
-        }
-        return "{$this->_request_method} $uri HTTP/1.1\r\n".
-                "HOST: " . APPLICATION_MOCKSERVER_HOST . "\r\n".
-                "\r\n" . 
-                $request_body_string;
-    }
-
-    public function getHttpResponseString() {
-        $response_header_string = '';
-
-        if ( ! empty( $this->_response_header ) ) {
-            foreach ($this->_response_header as $key => $value) {
-                $response_header_string .= "$key: $value\r\n";
-            }
-        }
-
-        return "HTTP/1.1 200 OK\r\n" . 
-                $response_header_string . "\r\n" . 
-                $this->_response_body;
+    public function getRequestMethod() {
+        return $this->_request_method;
     }
 
     public function getRequestQuery() {

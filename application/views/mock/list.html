@@ -24,13 +24,7 @@
     </div>
     <?php foreach ($list as $mock) :?>
     <pre>
-<b>Request</b>
-<hr style="margin:0" />
-<?php echo $mock['http_request'];?>
-
-
-<b>Response</b><hr style="margin:0" />
-<?php echo $mock['http_response']?>
+<?php echo $mock['output_http'];?>
     </pre>
     <?php endforeach;?>
 </div>
