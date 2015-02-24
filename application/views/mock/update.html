@@ -19,7 +19,8 @@
         <h2>Mock Server List</h2>
     </div>
     <div>
-      <h3>Create a mock response.</h3>
+      <a href="/mock/list?id=<?php echo $uri_id?>" class="pull-right btn btn-default btn-sm">Back to List</a>
+      <h3>Edit mock response.</h3>
     </div>
     <form class="form-horizontal" method="post" action="/mock/savemockresponse">
       <input type="hidden" name="id" value="<?php echo $id?>" />
@@ -70,7 +71,15 @@
       </div>
       <?php $idx++; endforeach;?>
 
-      <?php $idx = 0;if (empty($response_header)) $response_header=[""=>""];foreach($response_header as $key => $value): ?>
+      <?php 
+      $idx = 0;
+      if (empty($response_header)) $response_header=[""=>""];
+      foreach($response_header as $key => $mixed): 
+        if ( ! is_array($mixed) )
+          $mixed = [$mixed];
+
+        foreach ($mixed as $value) :
+      ?>
       <div <?php if ( ! $idx ) :?>id="div-response-header"<?php endif;?> class="form-group">
         <label for="txt-response-header" class="col-sm-2 control-label"><?php if ( ! $idx ) :?>Response Header<?php endif;?></label>
         <div class="col-sm-2">
@@ -86,6 +95,7 @@
         <?php endif;?>
       </div>
       <?php $idx++; endforeach;?>
+      <?php endforeach;?>
 
       <div class="form-group">
         <label for="txt-response-body" class="col-sm-2 control-label">Response Body</label>

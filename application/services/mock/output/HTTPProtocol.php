@@ -46,8 +46,12 @@ class HTTPProtocol {
         $this->_output .= 
             "< HTTP/1.1 200 OK\r\n";
 
-        foreach ($this->_Mock->getResponseHeader() as $key => $value) {
-            $this->_output .= "< $key: $value\r\n";
+        foreach ($this->_Mock->getResponseHeader() as $key => $mixed) {
+            if ( ! is_array($mixed) )
+                $mixed = [$mixed];
+
+            foreach ($mixed as $value)
+                $this->_output .= "< $key: $value\r\n";
         }
         $this->_output .= 
             "< \r\n" . 

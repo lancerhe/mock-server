@@ -75,12 +75,18 @@ class Mock extends \Core_Entity {
 
     public function setRequestQueryByKeyAndValue($request_query_key, $request_query_value) {
         $this->_request_query = [];
+        if ( ! is_array($request_query_key) ) 
+            return;
+
         foreach ($request_query_key as $idx => $key)
             if ($key) $this->_request_query[$key] = $request_query_value[$idx];
     }
 
     public function setRequestPostByKeyAndValue($request_post_key, $request_post_value) {
         $this->_request_post = [];
+        if ( ! is_array($request_post_key) ) 
+            return;
+
         foreach ($request_post_key as $idx => $key) 
             if ($key) $this->_request_post[$key] = $request_post_value[$idx];
 
@@ -91,16 +97,32 @@ class Mock extends \Core_Entity {
 
     public function setResponseHeaderByKeyAndValue($response_header_key, $response_header_value) {
         $this->_response_header = [];
-        foreach ($response_header_key as $idx => $key) 
-            if ($key) $this->_response_header[$key] = $response_header_value[$idx];
+        if ( ! is_array($response_header_key) ) 
+            return;
+
+        foreach ($response_header_key as $idx => $key)
+            $this->_addResponseHeader($key, $response_header_value[$idx]);
+    }
+
+    protected function _addResponseHeader($key, $value) {
+        if ( ! $key = trim($key) )
+            return;
+
+        if ( ! isset( $this->_response_header[$key] ) )
+            $this->_response_header[$key] = $value;
+        elseif ( ! is_array( $this->_response_header[$key] ) ) {
+            $this->_response_header[$key] = [$this->_response_header[$key], $value];
+        } else {
+            $this->_response_header[$key][] = $value;
+        }
     }
 
     public function setResponseBody($response_body) {
-        $this->_response_body = $response_body;
+        $this->_response_body = trim($response_body);
     }
 
     public function setTimeout($timeout) {
-        $this->_timeout = $timeout;
+        $this->_timeout = intval($timeout);
     }
 
     public function setUri($uri) {

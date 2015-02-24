@@ -42,6 +42,7 @@ class Controller_Mock extends \Core\Controller\Main {
         $this->getView()->assign('request_query',   $Mock->getRequestQuery() );
         $this->getView()->assign('request_post',    $Mock->getRequestPost() );
         $this->getView()->assign('id',              $Mock->getId());
+        $this->getView()->assign('uri_id',          $Mock->getUriId());
         $this->getView()->assign('uri',             $Mock->getUri());
         $this->getView()->assign('timeout',         $Mock->getTimeout());
         $this->getView()->display('mock/update.html');
