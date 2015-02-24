@@ -10,11 +10,16 @@ class MockCreateResponseTest extends Controller {
     public function setUp() {
         parent::setUp();
         $this->setUpDatabase();
+        $this->setUpGenerateMockFolder();
     }
 
     public function setUpDatabase() {
         $this->medoo()->setUp();
         $this->medoo()->import("mock.sql");
+    }
+
+    public function setUpGenerateMockFolder() {
+        \Service\Mock\Generator::$mock_path = '/mocktest';
     }
 
     public function buildPost($uri) {
@@ -64,5 +69,10 @@ class MockCreateResponseTest extends Controller {
         $mock = $this->medoo()->select('mock', '*', ["ORDER" => 'id DESC', "LIMIT" => 1])[0];
         $this->assertDatabaseMock($mock);
         $this->assertEquals('1', $mock['uri_id']);
+    }
+
+    public function tearDown() {
+        parent::tearDown();
+        shell_exec("rm -rf " . ROOT_PATH . "/mocktest");
     }
 }

@@ -4,6 +4,8 @@ namespace Service\Mock;
 
 class Generator {
 
+    public static $mock_path = '/mock';
+
     protected $_uri = [];
 
     protected $_mock = [];
@@ -29,22 +31,25 @@ class Generator {
     }
 
     private function __rebuild( \Service\Mock $Mock ) {
-        $this->_output[] = [
+        $mock = [
             "request" => [
                 "query" => $Mock->getRequestQuery(),
                 "post"  => $Mock->getRequestPost(),
             ],
             "response" => [
-                "delay"  => $Mock->getTimeout(),
                 "header" => $Mock->getResponseHeader(),
                 "body"   => $Mock->getResponseBody(),
             ],
         ];
+        if ( $Mock->getTimeout() ) 
+            $mock["response"]["delay"] = $Mock->getTimeout();
+
+        $this->_output[] = $mock;
     }
 
     private function __output() {
         $output = "exports.mock = " . json_encode($this->_output);
-        $output_file = ROOT_PATH. "/mock" . $this->_uri['uri'] . ".js";
+        $output_file = ROOT_PATH. self::$mock_path . $this->_uri['uri'] . ".js";
         $dirname = pathinfo($output_file)['dirname'];
         if ( ! is_dir( $dirname) ) mkdir($dirname, 0775, true);
         file_put_contents($output_file, $output);

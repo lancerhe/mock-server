@@ -38,6 +38,8 @@ class MockTest extends Controller {
         $this->assertCount(2,       $this->getView()->list);
         $this->assertEquals('1',    $this->getView()->list[1]['uri_id']);
         $this->assertEquals('2000', $this->getView()->list[1]['timeout']);
+        $this->assertContains('HTTP/1.1', $this->getView()->list[1]['output_http']);
+        $this->assertContains('curl',     $this->getView()->list[1]['output_curl']);
     }
 
     /**

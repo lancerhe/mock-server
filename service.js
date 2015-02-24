@@ -108,7 +108,8 @@ function server(request, response) {
                 }
             }
             if ( mock.response.body ) {
-                response.write( JSON.stringify( mock.response.body ) );
+                // response.write( JSON.stringify( mock.response.body ) );
+                response.write( mock.response.body );
             }
 
             response.end();

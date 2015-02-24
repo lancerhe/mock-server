@@ -28,13 +28,6 @@ class Controller_Mock extends \Core\Controller\Main {
         $this->getView()->display('mock/list.html');
     }
 
-    public function GenerateAction() {
-        $uri_id = intval( $this->getRequest()->getQuery('id') );
-
-        $ServiceGenerator = new \Service\Mock\Generator($uri_id);
-        $ServiceGenerator->generate();
-    }
-
     public function CreateAction() {
         $this->getView()->display('mock/create.html');
     }
@@ -73,6 +66,9 @@ class Controller_Mock extends \Core\Controller\Main {
         $Mock->setResponseBody($response_body);
         $Mock->setTimeout($timeout);
         $Mock->create();
+
+        $ServiceGenerator = new \Service\Mock\Generator($Mock->getUriId());
+        $ServiceGenerator->generate();
     }
 
     public function SaveMockResponseAction() {
@@ -96,5 +92,8 @@ class Controller_Mock extends \Core\Controller\Main {
         $Mock->setResponseBody($response_body);
         $Mock->setTimeout($timeout);
         $Mock->save();
+
+        $ServiceGenerator = new \Service\Mock\Generator($Mock->getUriId());
+        $ServiceGenerator->generate();
     }
 }

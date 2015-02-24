@@ -54,6 +54,10 @@ class Mock extends \Core_Entity {
         return $this->_uri;
     }
 
+    public function getUriId() {
+        return $this->_uri_id;
+    }
+
     public function setRequestQuery($request_query) {
         $this->_request_query = json_decode($request_query, true);
     }
