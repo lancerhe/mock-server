@@ -18,6 +18,8 @@ class Mock extends \Core_Entity {
 
     protected $_uri_id = null;
 
+    protected $_id = null;
+
     protected $_timeout = 0;
 
     public function getHttpRequestString() {
@@ -70,6 +72,14 @@ class Mock extends \Core_Entity {
         return $this->_timeout;
     }
 
+    public function getId() {
+        return $this->_id;
+    }
+
+    public function getUri() {
+        return $this->_uri;
+    }
+
     public function setRequestQuery($request_query) {
         $this->_request_query = json_decode($request_query, true);
     }
@@ -86,11 +96,13 @@ class Mock extends \Core_Entity {
     }
 
     public function setRequestQueryByKeyAndValue($request_query_key, $request_query_value) {
+        $this->_request_query = [];
         foreach ($request_query_key as $idx => $key)
             if ($key) $this->_request_query[$key] = $request_query_value[$idx];
     }
 
     public function setRequestPostByKeyAndValue($request_post_key, $request_post_value) {
+        $this->_request_post = [];
         foreach ($request_post_key as $idx => $key) 
             if ($key) $this->_request_post[$key] = $request_post_value[$idx];
 
@@ -100,6 +112,7 @@ class Mock extends \Core_Entity {
     }
 
     public function setResponseHeaderByKeyAndValue($response_header_key, $response_header_value) {
+        $this->_response_header = [];
         foreach ($response_header_key as $idx => $key) 
             if ($key) $this->_response_header[$key] = $response_header_value[$idx];
     }
@@ -120,12 +133,24 @@ class Mock extends \Core_Entity {
         $this->_uri_id = $uri_id;
     }
 
+    public function init($mock, $uri) {
+        $this->setResponseHeader($mock['response_header']);
+        $this->setResponseBody($mock['response_body']);
+        $this->setRequestQuery($mock['request_query']);
+        $this->setRequestPost($mock['request_post']);
+        $this->setTimeout($mock['timeout']);
+        $this->setUri($uri['uri']);
+        $this->setUriId($uri['id']);
+        $this->_id = $mock['id'];
+    }
+
     public function query($id) {
         $mock  = (new \Model_Mock())->fetchRowById($id);
         if ( empty($mock) ) {
             throw new \Core\Exception\NotFoundRecordException();
         }
-        return $mock;
+        $uri   = (new \Model_Uri())->fetchRowById($mock['uri_id']);
+        $this->init($mock, $uri);
     }
 
     public function create() {
@@ -140,8 +165,7 @@ class Mock extends \Core_Entity {
         ]);
     }
 
-    public function save($id) {
-        $this->query($id);
+    public function save() {
         $this->_uri_id = (new \Model_Uri())->createIfNotExist($this->_uri);
         $mock_id  = (new \Model_Mock())->updateRowById([
             "uri_id"          => $this->_uri_id,
@@ -150,6 +174,6 @@ class Mock extends \Core_Entity {
             "response_header" => json_encode($this->_response_header),
             "response_body"   => $this->_response_body,
             "timeout"         => $this->_timeout,
-        ], $id);
+        ], $this->_id);
     }
 }

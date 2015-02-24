@@ -57,11 +57,12 @@ class MockTest extends Controller {
         $this->setQuery("id", "2");
         $this->dispatch();
 
-        $this->assertEquals('2', $this->getView()->mock['id']);
+        $this->assertEquals('2', $this->getView()->id);
         $this->assertEquals('text/html', $this->getView()->response_header['Content-Type']);
         $this->assertEquals('{s:3}',     $this->getView()->response_body);
         $this->assertEquals('get',  $this->getView()->request_query['key']);
         $this->assertEquals('post', $this->getView()->request_post['key']);
-        $this->assertEquals('/mock/api/testing', $this->getView()->uri['uri']);
+        $this->assertEquals('4000', $this->getView()->timeout);
+        $this->assertEquals('/mock/api/testing', $this->getView()->uri);
     }
 }

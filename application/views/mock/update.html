@@ -22,17 +22,17 @@
       <h3>Create a mock response.</h3>
     </div>
     <form class="form-horizontal" method="post" action="/mock/savemockresponse">
-      <input type="hidden" name="id" value="<?php echo $mock['id']?>" />
+      <input type="hidden" name="id" value="<?php echo $id?>" />
       <div class="form-group">
         <label for="txt-uri" class="col-sm-2 control-label">Uri</label>
         <div class="col-sm-6">
-          <input type="text" class="form-control" id="txt-uri" name="uri" placeholder="Like: /api/singleproduction/info" value="<?php echo $uri['uri']?>">
+          <input type="text" class="form-control" id="txt-uri" name="uri" placeholder="Like: /api/singleproduction/info" value="<?php echo $uri?>">
         </div>
       </div>
       <div class="form-group">
         <label for="txt-timeout" class="col-sm-2 control-label">Timeout</label>
         <div class="col-sm-2">
-          <input type="text" class="form-control" id="txt-timeout" name="timeout" placeholder="Timeout: 2000ms" value="<?php echo $mock['timeout']?>">
+          <input type="text" class="form-control" id="txt-timeout" name="timeout" placeholder="Timeout: 2000ms" value="<?php echo $timeout?>">
         </div>
       </div>
 

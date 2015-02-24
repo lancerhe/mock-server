@@ -42,21 +42,15 @@ class Controller_Mock extends \Core\Controller\Main {
     public function UpdateAction() {
         $id = intval( $this->getRequest()->getQuery('id') );
 
-        $mock  = (new Model_Mock())->fetchRowById($id);
-        $uri   = (new Model_Uri())->fetchRowById($mock['uri_id']);
-
         $Mock = new \Service\Mock();
-        $Mock->setResponseHeader($mock['response_header']);
-        $Mock->setResponseBody($mock['response_body']);
-        $Mock->setRequestQuery($mock['request_query']);
-        $Mock->setRequestPost($mock['request_post']);
-
-        $this->getView()->assign('mock', $mock);
+        $Mock->query($id);
         $this->getView()->assign('response_header', $Mock->getResponseHeader() );
         $this->getView()->assign('response_body',   $Mock->getResponseBody() );
         $this->getView()->assign('request_query',   $Mock->getRequestQuery() );
         $this->getView()->assign('request_post',    $Mock->getRequestPost() );
-        $this->getView()->assign('uri', $uri);
+        $this->getView()->assign('id',              $Mock->getId());
+        $this->getView()->assign('uri',             $Mock->getUri());
+        $this->getView()->assign('timeout',         $Mock->getTimeout());
         $this->getView()->display('mock/update.html');
     }
 
@@ -94,12 +88,13 @@ class Controller_Mock extends \Core\Controller\Main {
         $response_header_value = $this->getRequest()->getPost('response_header_value');
 
         $Mock = new \Service\Mock();
+        $Mock->query($id);
         $Mock->setUri($uri);
         $Mock->setRequestQueryByKeyAndValue($request_query_key, $request_query_value);
         $Mock->setRequestPostByKeyAndValue($request_post_key, $request_post_value);
         $Mock->setResponseHeaderByKeyAndValue($response_header_key, $response_header_value);
         $Mock->setResponseBody($response_body);
         $Mock->setTimeout($timeout);
-        $Mock->save($id);
+        $Mock->save();
     }
 }

@@ -19,11 +19,7 @@ class PageListRender {
     public function render() {
         foreach ($this->_mock as $idx => $row) {
             $Mock = new \Service\Mock();
-            $Mock->setResponseHeader($row['response_header']);
-            $Mock->setResponseBody($row['response_body']);
-            $Mock->setRequestQuery($row['request_query']);
-            $Mock->setRequestPost($row['request_post']);
-            $Mock->setUri($this->_uri['uri']);
+            $Mock->init($row, $this->_uri);
 
             $this->_mock[$idx]['http_request']  = $Mock->getHttpRequestString();
             $this->_mock[$idx]['http_response'] = $Mock->getHttpResponseString();
