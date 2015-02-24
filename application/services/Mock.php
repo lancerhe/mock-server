@@ -10,6 +10,8 @@ class Mock extends \Core_Entity {
 
     protected $_request_post = [];
 
+    protected $_response_status_code = 200;
+
     protected $_response_header = [];
 
     protected $_response_body = '';
@@ -32,6 +34,10 @@ class Mock extends \Core_Entity {
 
     public function getRequestPost() {
         return $this->_request_post;
+    }
+
+    public function getResponseStatusCode() {
+        return $this->_response_status_code;
     }
 
     public function getResponseHeader() {
@@ -69,6 +75,13 @@ class Mock extends \Core_Entity {
         }
     }
 
+    public function setResponseStatusCode($response_status_code) {
+        if ( ! $response_status_code = intval($response_status_code) ) {
+            return;
+        }
+        $this->_response_status_code = $response_status_code;
+    }
+
     public function setResponseHeader($response_body) {
         $this->_response_header = json_decode($response_body, true);
     }
@@ -88,7 +101,7 @@ class Mock extends \Core_Entity {
             return;
 
         foreach ($request_post_key as $idx => $key) 
-            if ($key) $this->_request_post[$key] = $request_post_value[$idx];
+            $this->_addRequestPost($key, $request_post_value[$idx]);
 
         if ( ! empty($this->_request_post) ) {
             $this->_request_method = 'POST';
@@ -102,6 +115,19 @@ class Mock extends \Core_Entity {
 
         foreach ($response_header_key as $idx => $key)
             $this->_addResponseHeader($key, $response_header_value[$idx]);
+    }
+
+    protected function _addRequestPost($key, $value) {
+        if ( ! $key = trim($key) )
+            return;
+
+        if ( ! isset( $this->_request_post[$key] ) )
+            $this->_request_post[$key] = $value;
+        elseif ( ! is_array( $this->_request_post[$key] ) ) {
+            $this->_request_post[$key] = [$this->_request_post[$key], $value];
+        } else {
+            $this->_request_post[$key][] = $value;
+        }
     }
 
     protected function _addResponseHeader($key, $value) {
@@ -136,6 +162,7 @@ class Mock extends \Core_Entity {
     public function init($mock, $uri) {
         $this->setResponseHeader($mock['response_header']);
         $this->setResponseBody($mock['response_body']);
+        $this->setResponseStatusCode($mock['response_status_code']);
         $this->setRequestQuery($mock['request_query']);
         $this->setRequestPost($mock['request_post']);
         $this->setTimeout($mock['timeout']);
@@ -156,24 +183,26 @@ class Mock extends \Core_Entity {
     public function create() {
         $this->_uri_id = (new \Model_Uri())->createIfNotExist($this->_uri);
         $mock_id = (new \Model_Mock())->insertRow([
-            "uri_id"          => $this->_uri_id,
-            "request_query"   => json_encode($this->_request_query),
-            "request_post"    => json_encode($this->_request_post),
-            "response_header" => json_encode($this->_response_header),
-            "response_body"   => $this->_response_body,
-            "timeout"         => $this->_timeout,
+            "uri_id"               => $this->_uri_id,
+            "request_query"        => json_encode($this->_request_query),
+            "request_post"         => json_encode($this->_request_post),
+            "response_header"      => json_encode($this->_response_header),
+            "response_status_code" => $this->_response_status_code,
+            "response_body"        => $this->_response_body,
+            "timeout"              => $this->_timeout,
         ]);
     }
 
     public function save() {
         $this->_uri_id = (new \Model_Uri())->createIfNotExist($this->_uri);
         $mock_id  = (new \Model_Mock())->updateRowById([
-            "uri_id"          => $this->_uri_id,
-            "request_query"   => json_encode($this->_request_query),
-            "request_post"    => json_encode($this->_request_post),
-            "response_header" => json_encode($this->_response_header),
-            "response_body"   => $this->_response_body,
-            "timeout"         => $this->_timeout,
+            "uri_id"               => $this->_uri_id,
+            "request_query"        => json_encode($this->_request_query),
+            "request_post"         => json_encode($this->_request_post),
+            "response_header"      => json_encode($this->_response_header),
+            "response_status_code" => $this->_response_status_code,
+            "response_body"        => $this->_response_body,
+            "timeout"              => $this->_timeout,
         ], $this->_id);
     }
 }

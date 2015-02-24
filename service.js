@@ -17,6 +17,7 @@ function getMock(httprequest, list) {
 
 
         for ( var key in list[i].request.post ) {
+            //console.log(key, httprequest.post[key], list[i].request.post);
             if ( list[i].request.post[key] != httprequest.post[key] ) {
                 find = false;
                 continue;

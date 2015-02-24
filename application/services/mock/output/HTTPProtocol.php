@@ -44,7 +44,7 @@ class HTTPProtocol {
 
     protected function _buildResponseString() {
         $this->_output .= 
-            "< HTTP/1.1 200 OK\r\n";
+            "< HTTP/1.1 " . $this->_Mock->getResponseStatusCode() ." OK\r\n";
 
         foreach ($this->_Mock->getResponseHeader() as $key => $mixed) {
             if ( ! is_array($mixed) )

@@ -44,6 +44,9 @@ class Generator {
         if ( $Mock->getTimeout() ) 
             $mock["response"]["delay"] = $Mock->getTimeout();
 
+        if ( 200 != $status_code = $Mock->getResponseStatusCode() ) 
+            $mock["response"]["statusCode"] = $status_code;
+
         $this->_output[] = $mock;
     }
 

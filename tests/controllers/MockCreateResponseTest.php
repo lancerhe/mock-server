@@ -54,7 +54,7 @@ class MockCreateResponseTest extends Controller {
     /**
      * @test
      */
-    public function CreateMockResponse() {
+    public function CreateMockResponseWithNewUri() {
         $this->createRequest("/mock/createmockresponse");
         $this->buildPost('/api/new/testing-1-1-1');
         $this->dispatch();
@@ -103,7 +103,7 @@ class MockCreateResponseTest extends Controller {
     public function CreateMockResponseHeaderCookie() {
         $this->createRequest("/mock/createmockresponse");
         $this->setPost([
-            'uri'                   => "/index/responseheader",
+            'uri'                   => "/index/responseheadercookie",
             'response_header_key'   => [
                 'Set-Cookie',
                 'Set-Cookie',
@@ -118,13 +118,69 @@ class MockCreateResponseTest extends Controller {
         $this->dispatch();
 
         $mock    = $this->fetchCreateMock();
-        $content = $this->getMockContent("/index/responseheader");
+        $content = $this->getMockContent("/index/responseheadercookie");
 
         $this->assertEquals('{"Set-Cookie":["a=1; expires=Tue, 24-Feb-15 09:32:13 GMT; domain=www.baidu.com; path=\/","b=17; path=\/","PHPSESSID=9kdmhcn8vi2aaujc99l7o5poi3; path=\/"]}', $mock['response_header']);
 
         $this->assertContains('"a=1; expires=Tue, 24-Feb-15 09:32:13 GMT; domain=www.baidu.com; path=\/"', $content);
         $this->assertContains('"b=17; path=\/"', $content);
         $this->assertContains('"PHPSESSID=9kdmhcn8vi2aaujc99l7o5poi3; path=\/"', $content);
+    }
+
+    /**
+     * @test
+     */
+    public function CreateMockResponseHeaderLocation() {
+        $this->createRequest("/mock/createmockresponse");
+        $this->setPost([
+            'uri'                   => "/index/responseheaderlocation",
+            'response_header_key'   => [
+                'Location',
+            ],
+            'response_header_value' => [
+                'http://192.168.156.124/?login={$request.get.username}',
+            ],
+            'response_status_code' => '302',
+        ]);
+        $this->dispatch();
+
+        $mock    = $this->fetchCreateMock();
+        $content = $this->getMockContent("/index/responseheaderlocation");
+
+        $this->assertEquals("302", $mock['response_status_code']);
+        $this->assertEquals('{"Location":"http:\/\/192.168.156.124\/?login={$request.get.username}"}', $mock['response_header']);
+        $this->assertContains('"statusCode": 302', $content);
+        $this->assertContains('"Location": "http:\/\/192.168.156.124\/?login={$request.get.username}"', $content);
+    }
+
+        /**
+     * @test
+     */
+    public function CreateMockRequestPost() {
+        $this->createRequest("/mock/createmockresponse");
+        $this->setPost([
+            'uri'                   => "/index/responsepost",
+            'request_post_key'   => [
+                'username',
+                'avatar',
+                'avatar',
+            ],
+            'request_post_value' => [
+                'LancerHe',
+                '1.jpg',
+                '2.jpg',
+            ],
+        ]);
+        $this->dispatch();
+
+        $mock    = $this->fetchCreateMock();
+        $content = $this->getMockContent("/index/responsepost");
+
+        $this->assertEquals('{"username":"LancerHe","avatar":["1.jpg","2.jpg"]}', $mock['request_post']);
+
+        $this->assertContains('"username": "LancerHe"', $content);
+        $this->assertContains('"1.jpg"', $content);
+        $this->assertContains('"2.jpg"', $content);
     }
 
     public function tearDown() {

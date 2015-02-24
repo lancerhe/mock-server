@@ -7,13 +7,13 @@
 Class Model_Mock extends \Core\Model\Medoo {
 
     public function fetchListByUriId($uri_id) {
-        $rows = $this->medoo()->select('mock', ['id', 'uri_id', 'request_query', 'request_post', 'response_header', 'response_body', 'timeout'], ['uri_id' => $uri_id]);
+        $rows = $this->medoo()->select('mock', '*', ['uri_id' => $uri_id]);
         $rows = \Util_Array::column($rows, null, 'id');
         return $rows;
     }
 
     public function fetchRowById($id) {
-        $rows = $this->medoo()->select('mock', ['id', 'uri_id', 'request_query', 'request_post', 'response_header', 'response_body', 'timeout'], ['id' => $id]);
+        $rows = $this->medoo()->select('mock', '*', ['id' => $id]);
         return isset($rows[0]) ? $rows[0] : [];
     }
 

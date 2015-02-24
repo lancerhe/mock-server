@@ -37,10 +37,11 @@ class Controller_Mock extends \Core\Controller\Main {
 
         $Mock = new \Service\Mock();
         $Mock->query($id);
-        $this->getView()->assign('response_header', $Mock->getResponseHeader() );
-        $this->getView()->assign('response_body',   $Mock->getResponseBody() );
-        $this->getView()->assign('request_query',   $Mock->getRequestQuery() );
-        $this->getView()->assign('request_post',    $Mock->getRequestPost() );
+        $this->getView()->assign('response_header',      $Mock->getResponseHeader() );
+        $this->getView()->assign('response_body',        $Mock->getResponseBody() );
+        $this->getView()->assign('response_status_code', $Mock->getResponseStatusCode() );
+        $this->getView()->assign('request_query',        $Mock->getRequestQuery() );
+        $this->getView()->assign('request_post',         $Mock->getRequestPost() );
         $this->getView()->assign('id',              $Mock->getId());
         $this->getView()->assign('uri_id',          $Mock->getUriId());
         $this->getView()->assign('uri',             $Mock->getUri());
@@ -52,6 +53,7 @@ class Controller_Mock extends \Core\Controller\Main {
         $uri                   = $this->getRequest()->getPost('uri');
         $timeout               = $this->getRequest()->getPost('timeout');
         $response_body         = $this->getRequest()->getPost('response_body');
+        $response_status_code  = $this->getRequest()->getPost('response_status_code');
         $request_query_key     = $this->getRequest()->getPost('request_query_key');
         $request_query_value   = $this->getRequest()->getPost('request_query_value');
         $request_post_key      = $this->getRequest()->getPost('request_post_key');
@@ -65,6 +67,7 @@ class Controller_Mock extends \Core\Controller\Main {
         $Mock->setRequestPostByKeyAndValue($request_post_key, $request_post_value);
         $Mock->setResponseHeaderByKeyAndValue($response_header_key, $response_header_value);
         $Mock->setResponseBody($response_body);
+        $Mock->setResponseStatusCode($response_status_code);
         $Mock->setTimeout($timeout);
         $Mock->create();
 
@@ -77,6 +80,7 @@ class Controller_Mock extends \Core\Controller\Main {
         $uri                   = $this->getRequest()->getPost('uri');
         $timeout               = $this->getRequest()->getPost('timeout');
         $response_body         = $this->getRequest()->getPost('response_body');
+        $response_status_code  = $this->getRequest()->getPost('response_status_code');
         $request_query_key     = $this->getRequest()->getPost('request_query_key');
         $request_query_value   = $this->getRequest()->getPost('request_query_value');
         $request_post_key      = $this->getRequest()->getPost('request_post_key');
@@ -91,6 +95,7 @@ class Controller_Mock extends \Core\Controller\Main {
         $Mock->setRequestPostByKeyAndValue($request_post_key, $request_post_value);
         $Mock->setResponseHeaderByKeyAndValue($response_header_key, $response_header_value);
         $Mock->setResponseBody($response_body);
+        $Mock->setResponseStatusCode($response_status_code);
         $Mock->setTimeout($timeout);
         $Mock->save();
 

@@ -54,7 +54,15 @@
       </div>
       <?php $idx++; endforeach;?>
 
-      <?php $idx = 0;if (empty($request_post)) $request_post=[""=>""]; foreach($request_post as $key => $value): ?>
+      <?php 
+      $idx = 0;
+      if (empty($request_post)) $request_post=[""=>""]; 
+      foreach($request_post as $key => $mixed): 
+        if ( ! is_array($mixed) )
+          $mixed = [$mixed];
+
+        foreach ($mixed as $value) :
+      ?>
       <div <?php if ( ! $idx ) :?>id="div-request-post"<?php endif;?> class="form-group">
         <label for="txt-request-post" class="col-sm-2 control-label"><?php if ( ! $idx ) :?>Request Post<?php endif;?></label>
         <div class="col-sm-2">
@@ -70,7 +78,14 @@
         <?php endif;?>
       </div>
       <?php $idx++; endforeach;?>
+      <?php endforeach;?>
 
+      <div class="form-group">
+        <label for="txt-response-status-code" class="col-sm-2 control-label">Response Status Code</label>
+        <div class="col-sm-2">
+          <input type="text" class="form-control" id="txt-response-status-code" name="response_status_code" placeholder="200" value="<?php echo $response_status_code?>">
+        </div>
+      </div>
       <?php 
       $idx = 0;
       if (empty($response_header)) $response_header=[""=>""];
