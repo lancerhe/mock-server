@@ -25,7 +25,6 @@ class Generator {
 
             $this->__rebuild($Mock);
         }
-
         $this->__output();
     }
 
