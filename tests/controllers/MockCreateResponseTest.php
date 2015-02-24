@@ -153,13 +153,13 @@ class MockCreateResponseTest extends Controller {
         $this->assertContains('"Location": "http:\/\/192.168.156.124\/?login={$request.get.username}"', $content);
     }
 
-        /**
+    /**
      * @test
      */
     public function CreateMockRequestPost() {
         $this->createRequest("/mock/createmockresponse");
         $this->setPost([
-            'uri'                   => "/index/responsepost",
+            'uri'                   => "/index/requestpost",
             'request_post_key'   => [
                 'username',
                 'avatar',
@@ -174,13 +174,43 @@ class MockCreateResponseTest extends Controller {
         $this->dispatch();
 
         $mock    = $this->fetchCreateMock();
-        $content = $this->getMockContent("/index/responsepost");
+        $content = $this->getMockContent("/index/requestpost");
 
         $this->assertEquals('{"username":"LancerHe","avatar":["1.jpg","2.jpg"]}', $mock['request_post']);
 
         $this->assertContains('"username": "LancerHe"', $content);
         $this->assertContains('"1.jpg"', $content);
         $this->assertContains('"2.jpg"', $content);
+    }
+
+    /**
+     * @test
+     */
+    public function CreateMockRequestQuery() {
+        $this->createRequest("/mock/createmockresponse");
+        $this->setPost([
+            'uri'                   => "/index/requestquery",
+            'request_query_key'   => [
+                'username',
+                'pid',
+                'pid',
+            ],
+            'request_query_value' => [
+                'LancerHe',
+                '12323',
+                '23322',
+            ],
+        ]);
+        $this->dispatch();
+
+        $mock    = $this->fetchCreateMock();
+        $content = $this->getMockContent("/index/requestquery");
+
+        $this->assertEquals('{"username":"LancerHe","pid":["12323","23322"]}', $mock['request_query']);
+
+        $this->assertContains('"username": "LancerHe"', $content);
+        $this->assertContains('"12323"', $content);
+        $this->assertContains('"23322"', $content);
     }
 
     public function tearDown() {

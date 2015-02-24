@@ -1,7 +1,7 @@
 var url  = require('url'),
     http = require('http'),
     fs = require('fs'),
-    querystring = require('querystring');
+    qs = require('qs');
 
 function getMock(httprequest, list) {
     mock = false;
@@ -9,7 +9,12 @@ function getMock(httprequest, list) {
     for ( var i in list ) {
         var find = true;
         for ( var key in list[i].request.query ) {
-            if ( list[i].request.query[key] != httprequest.query[key] ) {
+            if ( list[i].request.query[key] instanceof Array ) {
+                if ( ! isContained(httprequest.query[key], list[i].request.query[key]) ) {
+                    find = false;
+                    continue;
+                }
+            } else if ( list[i].request.query[key] != httprequest.query[key] ) {
                 find = false;
                 continue;
             }
@@ -17,8 +22,12 @@ function getMock(httprequest, list) {
 
 
         for ( var key in list[i].request.post ) {
-            //console.log(key, httprequest.post[key], list[i].request.post);
-            if ( list[i].request.post[key] != httprequest.post[key] ) {
+            if ( list[i].request.post[key] instanceof Array ) {
+                if ( ! isContained(httprequest.post[key], list[i].request.post[key]) ) {
+                    find = false;
+                    continue;
+                }
+            } else if ( list[i].request.post[key] != httprequest.post[key] ) {
                 find = false;
                 continue;
             }
@@ -30,6 +39,16 @@ function getMock(httprequest, list) {
         }
     }
     return mock;
+}
+
+function isContained(a, b) {
+    if ( ! (a instanceof Array) || !(b instanceof Array)) return false;
+    if (a.length < b.length) return false;
+    var aStr = a.toString();
+    for(var i = 0, len = b.length; i < len; i++){
+        if(aStr.indexOf(b[i]) == -1) return false;
+    }
+    return true;
 }
 
 function replaceRequest(httprequest, string) {
@@ -86,8 +105,8 @@ function server(request, response) {
     });
 
     request.addListener("end", function() {
-        httprequest.query = querystring.parse(urlinfo.query);
-        httprequest.post  = querystring.parse(httprequest.post);
+        httprequest.query = qs.parse(urlinfo.query);
+        httprequest.post  = qs.parse(httprequest.post)
 
         delete require.cache[mockfile];
         mock  = getMock( httprequest, require(mockfile).mock );

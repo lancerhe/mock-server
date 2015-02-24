@@ -92,7 +92,7 @@ class Mock extends \Core_Entity {
             return;
 
         foreach ($request_query_key as $idx => $key)
-            if ($key) $this->_request_query[$key] = $request_query_value[$idx];
+            $this->_addRequestQuery($key, $request_query_value[$idx]);
     }
 
     public function setRequestPostByKeyAndValue($request_post_key, $request_post_value) {
@@ -115,6 +115,19 @@ class Mock extends \Core_Entity {
 
         foreach ($response_header_key as $idx => $key)
             $this->_addResponseHeader($key, $response_header_value[$idx]);
+    }
+
+    protected function _addRequestQuery($key, $value) {
+        if ( ! $key = trim($key) )
+            return;
+
+        if ( ! isset( $this->_request_query[$key] ) )
+            $this->_request_query[$key] = $value;
+        elseif ( ! is_array( $this->_request_query[$key] ) ) {
+            $this->_request_query[$key] = [$this->_request_query[$key], $value];
+        } else {
+            $this->_request_query[$key][] = $value;
+        }
     }
 
     protected function _addRequestPost($key, $value) {
