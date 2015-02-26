@@ -37,7 +37,14 @@
         </div>
       </div>
 
-      <?php $idx = 0;if (empty($request_query)) $request_query=[""=>""];foreach($request_query as $key => $value): ?>
+      <?php $idx = 0;
+      if (empty($request_query)) $request_query=[""=>""];
+      foreach($request_query as $key => $mixed): 
+        if ( ! is_array($mixed) )
+          $mixed = [$mixed];
+
+        foreach ($mixed as $value) :
+      ?>
       <div <?php if ( ! $idx ) :?>id="div-request-query"<?php endif;?> class="form-group">
         <label for="txt-request-query" class="col-sm-2 control-label"><?php if ( ! $idx ) :?>Request Query<?php endif;?></label>
         <div class="col-sm-2">
@@ -53,6 +60,7 @@
         <?php endif;?>
       </div>
       <?php $idx++; endforeach;?>
+      <?php endforeach;?>
 
       <?php 
       $idx = 0;
