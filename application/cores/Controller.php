@@ -6,4 +6,10 @@
  */
 namespace Core;
 
-class Controller extends \Yaf\Controller_Abstract {}
+class Controller extends \Yaf\Controller_Abstract {
+
+    public function init() {
+        \Yaf\Dispatcher::getInstance()->disableView();
+    }
+
+}

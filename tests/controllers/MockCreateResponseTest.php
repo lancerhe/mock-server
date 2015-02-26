@@ -55,7 +55,7 @@ class MockCreateResponseTest extends Controller {
      * @test
      */
     public function CreateMockResponseWithNewUri() {
-        $this->createRequest("/mock/createmockresponse");
+        $this->createRequest("/ajax/mockhandler/create");
         $this->buildPost('/api/new/testing-1-1-1');
         $this->dispatch();
 
@@ -70,7 +70,7 @@ class MockCreateResponseTest extends Controller {
      * @test
      */
     public function CreateMockResponseWithUseOldUri() {
-        $this->createRequest("/mock/createmockresponse");
+        $this->createRequest("/ajax/mockhandler/create");
         $this->buildPost('/mock/api/testing');
         $this->dispatch();
 
@@ -83,7 +83,7 @@ class MockCreateResponseTest extends Controller {
      * @test
      */
     public function CreateMockResponseHeader() {
-        $this->createRequest("/mock/createmockresponse");
+        $this->createRequest("/ajax/mockhandler/create");
         $this->setPost([
             'uri'                   => "/index/responseheader",
             'response_header_key'   => ["Content-Type"],
@@ -101,7 +101,7 @@ class MockCreateResponseTest extends Controller {
      * @test
      */
     public function CreateMockResponseHeaderCookie() {
-        $this->createRequest("/mock/createmockresponse");
+        $this->createRequest("/ajax/mockhandler/create");
         $this->setPost([
             'uri'                   => "/index/responseheadercookie",
             'response_header_key'   => [
@@ -131,7 +131,7 @@ class MockCreateResponseTest extends Controller {
      * @test
      */
     public function CreateMockResponseHeaderLocation() {
-        $this->createRequest("/mock/createmockresponse");
+        $this->createRequest("/ajax/mockhandler/create");
         $this->setPost([
             'uri'                   => "/index/responseheaderlocation",
             'response_header_key'   => [
@@ -157,7 +157,7 @@ class MockCreateResponseTest extends Controller {
      * @test
      */
     public function CreateMockRequestPost() {
-        $this->createRequest("/mock/createmockresponse");
+        $this->createRequest("/ajax/mockhandler/create");
         $this->setPost([
             'uri'                   => "/index/requestpost",
             'request_post_key'   => [
@@ -187,7 +187,7 @@ class MockCreateResponseTest extends Controller {
      * @test
      */
     public function CreateMockRequestQuery() {
-        $this->createRequest("/mock/createmockresponse");
+        $this->createRequest("/ajax/mockhandler/create");
         $this->setPost([
             'uri'                   => "/index/requestquery",
             'request_query_key'   => [

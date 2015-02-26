@@ -6,10 +6,6 @@
  */
 class Controller_Mock extends \Core\Controller\Main {
 
-    public function init() {
-        \Yaf\Dispatcher::getInstance()->disableView();
-    }
-
     public function IndexAction() {
         $Model = new Model_Uri();
         $list = $Model->fetchList();
@@ -48,59 +44,5 @@ class Controller_Mock extends \Core\Controller\Main {
         $this->getView()->assign('uri',             $Mock->getUri());
         $this->getView()->assign('timeout',         $Mock->getTimeout());
         $this->getView()->display('mock/update.html');
-    }
-
-    public function CreateMockResponseAction() {
-        $uri                   = $this->getRequest()->getPost('uri');
-        $timeout               = $this->getRequest()->getPost('timeout');
-        $response_body         = $this->getRequest()->getPost('response_body');
-        $response_status_code  = $this->getRequest()->getPost('response_status_code');
-        $request_query_key     = $this->getRequest()->getPost('request_query_key');
-        $request_query_value   = $this->getRequest()->getPost('request_query_value');
-        $request_post_key      = $this->getRequest()->getPost('request_post_key');
-        $request_post_value    = $this->getRequest()->getPost('request_post_value');
-        $response_header_key   = $this->getRequest()->getPost('response_header_key');
-        $response_header_value = $this->getRequest()->getPost('response_header_value');
-
-        $Mock = new \Service\Mock();
-        $Mock->setUri($uri);
-        $Mock->setRequestQueryByKeyAndValue($request_query_key, $request_query_value);
-        $Mock->setRequestPostByKeyAndValue($request_post_key, $request_post_value);
-        $Mock->setResponseHeaderByKeyAndValue($response_header_key, $response_header_value);
-        $Mock->setResponseBody($response_body);
-        $Mock->setResponseStatusCode($response_status_code);
-        $Mock->setTimeout($timeout);
-        $Mock->create();
-
-        $ServiceGenerator = new \Service\Mock\Generator($Mock->getUriId());
-        $ServiceGenerator->generate();
-    }
-
-    public function SaveMockResponseAction() {
-        $id                    = $this->getRequest()->getPost('id');
-        $uri                   = $this->getRequest()->getPost('uri');
-        $timeout               = $this->getRequest()->getPost('timeout');
-        $response_body         = $this->getRequest()->getPost('response_body');
-        $response_status_code  = $this->getRequest()->getPost('response_status_code');
-        $request_query_key     = $this->getRequest()->getPost('request_query_key');
-        $request_query_value   = $this->getRequest()->getPost('request_query_value');
-        $request_post_key      = $this->getRequest()->getPost('request_post_key');
-        $request_post_value    = $this->getRequest()->getPost('request_post_value');
-        $response_header_key   = $this->getRequest()->getPost('response_header_key');
-        $response_header_value = $this->getRequest()->getPost('response_header_value');
-
-        $Mock = new \Service\Mock();
-        $Mock->query($id);
-        $Mock->setUri($uri);
-        $Mock->setRequestQueryByKeyAndValue($request_query_key, $request_query_value);
-        $Mock->setRequestPostByKeyAndValue($request_post_key, $request_post_value);
-        $Mock->setResponseHeaderByKeyAndValue($response_header_key, $response_header_value);
-        $Mock->setResponseBody($response_body);
-        $Mock->setResponseStatusCode($response_status_code);
-        $Mock->setTimeout($timeout);
-        $Mock->save();
-
-        $ServiceGenerator = new \Service\Mock\Generator($Mock->getUriId());
-        $ServiceGenerator->generate();
     }
 }

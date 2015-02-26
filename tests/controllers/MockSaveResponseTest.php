@@ -49,7 +49,7 @@ class MockSaveResponseTest extends Controller {
      */
     public function SaveMockResponseNotFoundByQuery() {
         $this->setExpectedException('\Core\Exception\NotFoundRecordException');
-        $this->createRequest("/mock/savemockresponse");
+        $this->createRequest("/ajax/mockhandler/save");
         $this->buildPost(99, '/api/new/testing');
         $this->dispatch();
     }
@@ -58,7 +58,7 @@ class MockSaveResponseTest extends Controller {
      * @test
      */
     public function SaveMockResponseWithCreateNewUri() {
-        $this->createRequest("/mock/savemockresponse");
+        $this->createRequest("/ajax/mockhandler/save");
         $this->buildPost(2, '/api/new/testing');
         $this->dispatch();
 
@@ -74,7 +74,7 @@ class MockSaveResponseTest extends Controller {
      * @test
      */
     public function SaveMockResponseWithUseOldUri() {
-        $this->createRequest("/mock/savemockresponse");
+        $this->createRequest("/ajax/mockhandler/save");
         $this->buildPost(2, '/uri/api/testing');
         $this->dispatch();
 
