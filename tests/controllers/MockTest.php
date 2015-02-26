@@ -30,6 +30,16 @@ class MockTest extends Controller {
     /**
      * @test
      */
+    public function ListExceptionWithNotFound() {
+        $this->setExpectedException('\Core\Exception\NotFoundRecordException');
+        $this->createRequest("/mock/list");
+        $this->setQuery("id", "999");
+        $this->dispatch();
+    }
+
+    /**
+     * @test
+     */
     public function ListAction() {
         $this->createRequest("/mock/list");
         $this->setQuery("id", "1");

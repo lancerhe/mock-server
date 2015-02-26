@@ -172,15 +172,15 @@ class Mock extends \Core_Entity {
         $this->_uri_id = $uri_id;
     }
 
-    public function init($mock, $uri) {
+    public function init($mock, $Uri) {
         $this->setResponseHeader($mock['response_header']);
         $this->setResponseBody($mock['response_body']);
         $this->setResponseStatusCode($mock['response_status_code']);
         $this->setRequestQuery($mock['request_query']);
         $this->setRequestPost($mock['request_post']);
         $this->setTimeout($mock['timeout']);
-        $this->setUri($uri['uri']);
-        $this->setUriId($uri['id']);
+        $this->setUri($Uri->getUri());
+        $this->setUriId($Uri->getId());
         $this->_id = $mock['id'];
     }
 
@@ -189,8 +189,9 @@ class Mock extends \Core_Entity {
         if ( empty($mock) ) {
             throw new \Core\Exception\NotFoundRecordException();
         }
-        $uri   = (new \Model_Uri())->fetchRowById($mock['uri_id']);
-        $this->init($mock, $uri);
+        $Uri = new \Service\Uri();
+        $Uri->query($mock['uri_id']);
+        $this->init($mock, $Uri);
     }
 
     public function create() {

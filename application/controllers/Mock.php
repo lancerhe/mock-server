@@ -23,8 +23,9 @@ class Controller_Mock extends \Core\Controller\Main {
         $ServiceRender = new \Service\Mock\PageListRender($uri_id);
         $ServiceRender->render();
 
-        $this->getView()->assign('list', $ServiceRender->getMockList());
-        $this->getView()->assign('uri',  $ServiceRender->getUri());
+        $this->getView()->assign('list',    $ServiceRender->getMockList());
+        $this->getView()->assign('uri_id',  $ServiceRender->getUri()->getId());
+        $this->getView()->assign('uri',     $ServiceRender->getUri()->getUri());
         $this->getView()->display('mock/list.html');
     }
 

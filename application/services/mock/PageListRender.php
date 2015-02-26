@@ -4,22 +4,22 @@ namespace Service\Mock;
 
 class PageListRender {
 
-    protected $_uri = [];
+    protected $_Uri = null;
 
     protected $_mock = [];
 
     public function __construct($uri_id) {
-        $Model = new \Model_Uri();
-        $this->_uri   = $Model->fetchRowById($uri_id);
+        $this->_Uri = new \Service\Uri();
+        $this->_Uri->query($uri_id);
 
         $Model = new \Model_Mock();
-        $this->_mock  = $Model->fetchListByUriId($uri_id);
+        $this->_mock  = $Model->fetchListByUriId($this->_Uri->getId());
     }
 
     public function render() {
         foreach ($this->_mock as $idx => $row) {
             $Mock = new \Service\Mock();
-            $Mock->init($row, $this->_uri);
+            $Mock->init($row, $this->_Uri);
 
             $ServiceHttp = new \Service\Mock\Output\HTTPProtocol($Mock);
             $ServiceCurl = new \Service\Mock\Output\Curl($Mock);
@@ -34,6 +34,6 @@ class PageListRender {
     }
 
     public function getUri() {
-        return $this->_uri;
+        return $this->_Uri;
     }
 }

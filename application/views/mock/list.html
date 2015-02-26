@@ -25,9 +25,9 @@
         <h2>Mock Server List</h2>
     </div>
     <div>
-        <a href="/mock/create?uri_id=<?php echo $uri['id']?>" class="pull-right btn btn-primary btn-sm">Create One</a>
+        <a href="/mock/create?uri_id=<?php echo $uri_id?>" class="pull-right btn btn-primary btn-sm">Create One</a>
         <a href="/mock/index" class="pull-right btn btn-default btn-sm" style="margin-right:10px;">Back to List</a>
-        <h3>List mock responses for &lt;<mark><?php echo $uri['uri'];?></mark>&gt;</h3>
+        <h3>List mock responses for &lt;<mark><?php echo $uri;?></mark>&gt;</h3>
     </div>
 
     <?php foreach ($list as $mock) :?>
