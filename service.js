@@ -3,8 +3,6 @@ var url  = require('url'),
     fs = require('fs'),
     qs = require('qs');
 
-
-
 function isContained(a, b) {
     if ( ! (a instanceof Array) || !(b instanceof Array)) return false;
     if (a.length < b.length) return false;
@@ -15,50 +13,6 @@ function isContained(a, b) {
     return true;
 }
 
-function replaceRequestKeyword(httprequest, string, keyword) {
-    var match = keyword.replace("{$", "").replace("}", "").split('.');
-    // console.log(string, match);
-    if ( match[0] != 'request' ) {
-        return string;
-    }
-
-    if ( match[1] == 'query' ) {
-        if ( undefined != typeof httprequest.query[match[2]] ) {
-            string = string.replace(keyword, httprequest.query[match[2]]);
-        }
-    }
-    replaceRequestKeywordByMethod();
-
-    if ( match[1] == 'post' ) {
-        if ( undefined != typeof httprequest.post[match[2]] ) {
-            string = string.replace(keyword, httprequest.post[match[2]]);
-        }
-    }
-    return string;
-}
-
-function replaceRequestKeywordByMethod() {
-    //console.log(httprequest, mock);
-}
-
-function replaceRequest(httprequest, string) {
-    if ( 'string' != typeof string) {
-        return string;
-    }
-
-    var regex   = /{\$[a-zA-Z1-9_.]*}/g;
-    var matches = string.match(regex);
-    for (m in matches) {
-        var keyword = matches[m];
-        string = replaceRequestKeyword(httprequest, string, keyword)
-    }
-    return string;
-}
-
-function server(request, response) {
-    MS = new MockServer(request, response);
-    MS.listen();
-}
 MockServer = function( request, response ) {
     this.request  = request;
     this.response = response;
@@ -106,10 +60,10 @@ MockServer.prototype = {
         });
     }
     , getMockByHttpRequest: function() {
-        list = this.getMockList();
-        method = ['query', 'post'];
-        mock = false;
-        find = true;
+        var list = this.getMockList();
+        var method = ['query', 'post'];
+        var mock = false;
+        var find = true;
         for ( var i in list ) {
             var find = true;
             for (var k = 0; k < method.length; k++) {
@@ -144,10 +98,10 @@ MockServer.prototype = {
         MC = new MockControl( this.httprequest, this.mocklist );
         var self = this;
         this.response.setTimeout(MC.getMockResponse().getTimeout(), function() {
-            self.responseSuccessDetail();
+            self.responseDetail();
         });
     }
-    , responseSuccessDetail: function() {
+    , responseDetail: function() {
         MC.replaceKeyword();
         this.response.statusCode = MC.getMockResponse().getStatusCode();
 
@@ -195,20 +149,17 @@ MockControl.prototype = {
     }
     , replaceRequestKeyword: function(string, keyword) {
         var match = keyword.replace("{$", "").replace("}", "").split('.');
-        // console.log(string, match);
+        var method = ['query', 'post'];
+
         if ( match[0] != 'request' ) {
             return string;
         }
 
-        if ( match[1] == 'query' ) {
-            if ( undefined != typeof this.httprequest.query[match[2]] ) {
-                string = string.replace(keyword, this.httprequest.query[match[2]]);
-            }
-        }
-
-        if ( match[1] == 'post' ) {
-            if ( undefined != typeof this.httprequest.post[match[2]] ) {
-                string = string.replace(keyword, this.httprequest.post[match[2]]);
+        for (var k = 0; k < method.length; k++) {
+            if ( match[1] == method[k] ) {
+                if ( undefined != typeof this.httprequest[method[k]][match[2]] ) {
+                    string = string.replace(keyword, this.httprequest[method[k]][match[2]]);
+                }
             }
         }
         return string;
@@ -241,5 +192,9 @@ HttpRequest = function( request ) {
     this.post  = request.post;
 }
 
+function server(request, response) {
+    MS = new MockServer(request, response);
+    MS.listen();
+}
 httpserver = http.createServer(server);
 httpserver.listen('8096', "0.0.0.0");
