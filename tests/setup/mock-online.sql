@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50170
 File Encoding         : 65001
 
-Date: 2015-02-26 16:44:16
+Date: 2015-02-26 23:11:37
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -34,10 +34,13 @@ CREATE TABLE `mock` (
 -- ----------------------------
 -- Records of mock
 -- ----------------------------
-INSERT INTO `mock` VALUES ('4', '6', '{\"charset\":\"utf-8\"}', '[]', '200', '{\"Content-Type\":\"text\\/html;charset=utf-8\",\"Set-Cookie\":[\"a=1; expires=Tue, 24-Feb-15 09:32:13 GMT; domain=www.baidu.com; path=\\/\",\"b=17; path=\\/\",\"PHPSESSID=9kdmhcn8vi2aaujc99l7o5poi3; path=\\/\"]}', '{\"Content-Encoding\":\"gzip\",\"Content-Type\":\"text/html;charset=utf-8\"}', '0');
-INSERT INTO `mock` VALUES ('5', '7', '{\"username\":\"LancerHe\"}', '{\"pass\":\"Key\"}', '302', '{\"Location\":\"http:\\/\\/192.168.156.124\\/?login={$request.query.username}&pass={$request.post.pass}\"}', '', '0');
-INSERT INTO `mock` VALUES ('6', '5', '[]', '{\"username\":\"LancerHe\",\"avatar\":[\"1.jpg\",\"2.jpg\"]}', '200', '[]', 'Success', '500');
-INSERT INTO `mock` VALUES ('7', '4', '{\"username\":\"LancerHe\",\"pid\":[\"66559\",\"16162\"]}', '[]', '200', '[]', 'Failure', '200');
+INSERT INTO `mock` VALUES ('1', '1', '{\"username\":\"LancerHe\"}', '{\"password\":\"123456\"}', '200', '[]', 'Password Correct', '200');
+INSERT INTO `mock` VALUES ('2', '2', '[]', '[]', '404', '[]', '', '0');
+INSERT INTO `mock` VALUES ('3', '3', '[]', '[]', '200', '[]', 'Delay 5s', '5000');
+INSERT INTO `mock` VALUES ('4', '4', '{\"username\":\"LancerHe\",\"pid\":[\"66559\",\"16162\"]}', '[]', '200', '[]', 'Failure', '200');
+INSERT INTO `mock` VALUES ('5', '5', '[]', '{\"username\":\"LancerHe\",\"avatar\":[\"1.jpg\",\"2.jpg\"]}', '200', '[]', 'Success', '500');
+INSERT INTO `mock` VALUES ('6', '6', '{\"charset\":\"utf-8\"}', '[]', '200', '{\"Content-Type\":\"text\\/html;charset=utf-8\",\"Set-Cookie\":[\"a=1; expires=Tue, 24-Feb-15 09:32:13 GMT; domain=www.baidu.com; path=\\/\",\"b=17; path=\\/\",\"PHPSESSID=9kdmhcn8vi2aaujc99l7o5poi3; path=\\/\"]}', '{\"Content-Encoding\":\"gzip\",\"Content-Type\":\"text/html;charset=utf-8\"}', '0');
+INSERT INTO `mock` VALUES ('7', '7', '{\"username\":\"LancerHe\"}', '{\"pass\":\"KeyTemp\"}', '302', '{\"Location\":\"http:\\/\\/192.168.156.124\\/?login={$request.query.username}&pass={$request.post.pass}\"}', '', '0');
 
 -- ----------------------------
 -- Table structure for `uri`
@@ -52,6 +55,9 @@ CREATE TABLE `uri` (
 -- ----------------------------
 -- Records of uri
 -- ----------------------------
+INSERT INTO `uri` VALUES ('1', '/request/postandquery');
+INSERT INTO `uri` VALUES ('2', '/response/httpcode404');
+INSERT INTO `uri` VALUES ('3', '/response/delay');
 INSERT INTO `uri` VALUES ('4', '/request/query');
 INSERT INTO `uri` VALUES ('5', '/request/post');
 INSERT INTO `uri` VALUES ('6', '/response/cookie');
