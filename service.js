@@ -13,47 +13,42 @@ function isContained(a, b) {
     return true;
 }
 
-MockServer = function( request, response ) {
+MockFactor = function( request, response ) {
     this.request  = request;
     this.response = response;
-    this.mockfile = null;
-    this.urlinfo  = null;
-    this.init();
+    this._init();
 }
 
-MockServer.prototype = {
-    init: function() {
+MockFactor.prototype = {
+    _init: function() {
         this.request.setEncoding('utf-8');
         this.urlinfo  = url.parse(this.request.url);
         this.mockfile = require('path').resolve() + "/mock" + this.urlinfo.pathname + '.js';
-        this.mocklist = [];
         this.httppoststring = '';
         this.httprequest = {};
+        this.httprequest.query = qs.parse(this.urlinfo.query);
     }
-    , listen: function() {
-        var self = this;
+    , createServer: function() {
         if ( '/favicon.ico' == this.request.url ) {
             return false;
         }
 
         if ( ! fs.existsSync( this.mockfile ) ) {
-            responseError("Mock config file not exists!");
-            return false;
+            return this.responseError("Error: Mock config file not exists!");
         }
 
+        var self = this;
         this.request.addListener("data", function(data) {
             self.httppoststring += data;
         });
 
         this.request.addListener("end", function() {
-            self.httprequest.query = qs.parse(self.urlinfo.query);
-            self.httprequest.post  = qs.parse(self.httppoststring);
-
             delete require.cache[ self.mockfile ];
+            self.httprequest.post = qs.parse(self.httppoststring);
+            self.mockconfig       = self.getMockByHttpRequest();
 
-            if ( false === ( self.mocklist = self.getMockByHttpRequest() ) ) {
-                self.responseError("Mock request not exists!");
-                return false;
+            if ( false === self.mockconfig ) {
+                return self.responseError("Error: Mock request not exists!");
             }
 
             self.responseSuccess()
@@ -95,31 +90,28 @@ MockServer.prototype = {
         this.response.end();
     }
     , responseSuccess: function() {
-        MC = new MockControl( this.httprequest, this.mocklist );
+        var dispatcher = new MockDispatcher( this.httprequest, this.mockconfig );
         var self = this;
-        this.response.setTimeout(MC.getMockResponse().getTimeout(), function() {
-            self.responseDetail();
+        this.response.setTimeout(dispatcher.getMockResponse().delay, function() {
+            dispatcher.replaceKeyword();
+            self.response.statusCode = dispatcher.getMockResponse().statusCode;
+
+            for( key in dispatcher.getMockResponse().header ) {
+                self.response.setHeader( key, dispatcher.getMockResponse().header[key] );
+            }
+            self.response.write( dispatcher.getMockResponse().body );
+            self.response.end();
         });
     }
-    , responseDetail: function() {
-        MC.replaceKeyword();
-        this.response.statusCode = MC.getMockResponse().getStatusCode();
-
-        for( key in MC.getMockResponse().header ) {
-            this.response.setHeader( key, MC.getMockResponse().header[key] );
-        }
-        this.response.write( MC.getMockResponse().body );
-        this.response.end();
-    }
 }
 
-MockControl = function( httprequest, mockexport ) {
+MockDispatcher = function( httprequest, mockconfig ) {
     this.httprequest    = new HttpRequest(httprequest);
-    this.requirerequest = new MockRequest(mockexport.request);
-    this.mockresponse   = new MockResponse(mockexport.response);
+    this.requirerequest = new MockRequest(mockconfig.request);
+    this.mockresponse   = new MockResponse(mockconfig.response);
 }
 
-MockControl.prototype = {
+MockDispatcher.prototype = {
     getHttpRequest: function() {
         return this.httprequest;
     }
@@ -169,17 +161,8 @@ MockControl.prototype = {
 MockResponse = function( response ) {
     this.header     = response.header;
     this.delay      = typeof response.delay == 'undefined' ? 1 : response.delay;
-    this.statusCode = response.statusCode;
+    this.statusCode = typeof response.statusCode == 'undefined' ? 200 : response.statusCode;
     this.body       = response.body;
-}
-
-MockResponse.prototype = {
-    getTimeout: function() {
-        return this.delay;
-    }
-    , getStatusCode: function() {
-        return this.statusCode ? this.statusCode : 200;
-    }
 }
 
 MockRequest = function( request ) {
@@ -192,9 +175,9 @@ HttpRequest = function( request ) {
     this.post  = request.post;
 }
 
-function server(request, response) {
-    MS = new MockServer(request, response);
-    MS.listen();
-}
-httpserver = http.createServer(server);
+
+httpserver = http.createServer(function (request, response) {
+    factor = new MockFactor(request, response);
+    factor.createServer();
+});
 httpserver.listen('8096', "0.0.0.0");
