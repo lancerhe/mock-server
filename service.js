@@ -73,7 +73,8 @@ MockServer.prototype = {
         this.urlinfo  = url.parse(this.request.url);
         this.mockfile = require('path').resolve() + "/mock" + this.urlinfo.pathname + '.js';
         this.mocklist = [];
-        this.httprequest = {query:'', post:''};
+        this.httppoststring = '';
+        this.httprequest = {};
     }
     , listen: function() {
         var self = this;
@@ -82,59 +83,48 @@ MockServer.prototype = {
         }
 
         if ( ! fs.existsSync( this.mockfile ) ) {
-            responseError("MockControl config file not exists!");
+            responseError("Mock config file not exists!");
             return false;
         }
 
         this.request.addListener("data", function(data) {
-            self.httprequest.post += data;
+            self.httppoststring += data;
         });
 
         this.request.addListener("end", function() {
             self.httprequest.query = qs.parse(self.urlinfo.query);
-            self.httprequest.post  = qs.parse(self.httprequest.post);
+            self.httprequest.post  = qs.parse(self.httppoststring);
 
             delete require.cache[ self.mockfile ];
 
-            if ( false === ( self.mocklist = self.getMock() ) ) {
-                self.responseError("MockControl request not exists!");
+            if ( false === ( self.mocklist = self.getMockByHttpRequest() ) ) {
+                self.responseError("Mock request not exists!");
                 return false;
             }
 
             self.responseSuccess()
         });
     }
-    , getMock: function() {
+    , getMockByHttpRequest: function() {
         list = this.getMockList();
+        method = ['query', 'post'];
         mock = false;
         find = true;
         for ( var i in list ) {
             var find = true;
-            for ( var key in list[i].request.query ) {
-                if ( list[i].request.query[key] instanceof Array ) {
-                    if ( ! isContained(this.httprequest.query[key], list[i].request.query[key]) ) {
+            for (var k = 0; k < method.length; k++) {
+                for ( var key in list[i].request[method[k]] ) {
+                    if ( list[i].request[method[k]][key] instanceof Array ) {
+                        if ( ! isContained(this.httprequest[method[k]][key], list[i].request[method[k]][key]) ) {
+                            find = false;
+                            continue;
+                        }
+                    } else if ( list[i].request[method[k]][key] != this.httprequest[method[k]][key] ) {
                         find = false;
                         continue;
                     }
-                } else if ( list[i].request.query[key] != this.httprequest.query[key] ) {
-                    find = false;
-                    continue;
                 }
-            }
-
-
-            for ( var key in list[i].request.post ) {
-                if ( list[i].request.post[key] instanceof Array ) {
-                    if ( ! isContained(this.httprequest.post[key], list[i].request.post[key]) ) {
-                        find = false;
-                        continue;
-                    }
-                } else if ( list[i].request.post[key] != this.httprequest.post[key] ) {
-                    find = false;
-                    continue;
-                }
-            }
-
+            };
             if ( find ) {
                 mock = list[i];
                 break;
