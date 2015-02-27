@@ -1,34 +1,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="/static/styles/bootstrap.min.css">
-<link rel="stylesheet" href="/static/styles/bootstrap-theme.min.css">
+<?php include APPLICATION_VIEWS_PATH . '/common/page-head.html';?>
 <title>Control Panel</title>
 </head>
 <body>
-<nav class="navbar navbar-default navbar-static-top">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand">Control Panel</a>
-        </div>
-    </div>
-</nav>
-<style>
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {background-color: #f5f5f5;}
-.tab-content {position:relative}
-.tab-content pre {border-top-left-radius: 0;border-top: none; border-color: #ddd;}
-.tab-content .btn-update-mock {position:absolute; right:0; top:-35px;}
-</style>
+<?php include APPLICATION_VIEWS_PATH . '/common/page-topbar.html';?>
 <div class="container">
-    <div class="jumbotron">
-        <h2>Mock Server List</h2>
-    </div>
-    <div>
+    <h1>
         <a href="/mock/create?uri_id=<?php echo $uri_id?>" class="pull-right btn btn-primary btn-sm">Create One</a>
-        <a href="/mock/index" class="pull-right btn btn-default btn-sm" style="margin-right:10px;">Back to List</a>
-        <h3>List mock responses for &lt;<mark><?php echo $uri;?></mark>&gt;</h3>
+        <a href="/" class="pull-right btn btn-default btn-sm" style="margin-right:10px;">Back to List</a>
+        Mock Response List</h1>
+    <hr />
+    <div class="bs-callout bs-callout-danger" id="callout-tables-striped-ie8">
+        <h4>List mock responses for &lt;<mark><?php echo $uri;?></mark>&gt;</h4>
+        <p>Please test the example which in panel.</p>
     </div>
+        <h3></h3>
+    </blockquote>
 
     <?php foreach ($list as $mock) :?>
     <ul data-role="tab" class="nav nav-tabs">

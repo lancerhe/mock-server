@@ -1,27 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" href="/static/styles/bootstrap.min.css">
-<link rel="stylesheet" href="/static/styles/bootstrap-theme.min.css">
+<?php include APPLICATION_VIEWS_PATH . '/common/page-head.html';?>
 <title>Control Panel</title>
 </head>
 <body>
-<nav class="navbar navbar-default navbar-static-top">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand">Control Panel</a>
-        </div>
-    </div>
-</nav>
+<?php include APPLICATION_VIEWS_PATH . '/common/page-topbar.html';?>
 <div class="container">
-    <div class="jumbotron">
-        <h2>Mock Server List</h2>
-    </div>
-    <div>
-      <a href="/mock/list?id=<?php echo $uri_id?>" class="pull-right btn btn-default btn-sm">Back to List</a>
-      <h3>Edit mock response.</h3>
-    </div>
+    <h1>
+      <a href="/mock/list?id=<?php echo $uri_id?>" class="pull-right btn btn-default btn-sm">Back to List</a>Edit Mock Response</h1>
+    <hr />
     <form class="form-horizontal" method="post" id="form-mock">
       <input type="hidden" name="id" value="<?php echo $id?>" />
       <div class="form-group">
