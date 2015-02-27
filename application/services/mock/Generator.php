@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Mock Response Generator for Nodejs server config js
+ * @author Lancer He <lancer.he@gmail.com>
+ * @since  2015-02-20
+ */
 namespace Service\Mock;
 
 class Generator {

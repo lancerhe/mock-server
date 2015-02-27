@@ -34,6 +34,7 @@
     <ul data-role="tab" class="nav nav-tabs">
         <li class="active"><a href="#http-<?php echo $mock['id']?>" data-toggle="tab">HTTP Protocol</a></li>
         <li class=""><a href="#curl-<?php echo $mock['id']?>" data-toggle="tab">Curl</a></li>
+        <li class=""><a href="#php-<?php echo $mock['id']?>" data-toggle="tab">PHP</a></li>
     </ul>
     <div class="tab-content">
         <a href="/mock/update?id=<?php echo $mock['id']?>" class="btn btn-warning btn-sm btn-update-mock">Edit</a>
@@ -42,6 +43,9 @@
         </div>
         <div class="tab-pane fade" id="curl-<?php echo $mock['id']?>">
 <pre><?php echo $mock['output_curl'];?></pre>
+        </div>
+        <div class="tab-pane fade" id="php-<?php echo $mock['id']?>">
+<pre><?php echo $mock['output_php'];?></pre>
         </div>
     </div>
     <?php endforeach;?>

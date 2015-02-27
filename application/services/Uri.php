@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Mock Uri Entity
+ * @author Lancer He <lancer.he@gmail.com>
+ * @since  2015-02-23
+ */
 namespace Service;
 
 class Uri extends \Core_Entity {

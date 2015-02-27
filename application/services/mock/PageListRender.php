@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Mock Response render for page.
+ * @author Lancer He <lancer.he@gmail.com>
+ * @since  2015-02-19
+ */
 namespace Service\Mock;
 
 class PageListRender {
@@ -23,9 +27,11 @@ class PageListRender {
 
             $ServiceHttp = new \Service\Mock\Output\HTTPProtocol($Mock);
             $ServiceCurl = new \Service\Mock\Output\Curl($Mock);
+            $ServicePHP  = new \Service\Mock\Output\PHP($Mock);
 
             $this->_mock[$idx]['output_http'] = $ServiceHttp->output();
             $this->_mock[$idx]['output_curl'] = $ServiceCurl->output();
+            $this->_mock[$idx]['output_php']  = $ServicePHP->output();
         }
     }
 
