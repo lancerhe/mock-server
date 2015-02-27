@@ -1,13 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<?php include APPLICATION_VIEWS_PATH . '/common/page-head.html';?>
+<?php include APPLICATION_VIEWS_PATH . '/common/page_head.html';?>
 <title>Control Panel</title>
 </head>
 <body>
-<?php include APPLICATION_VIEWS_PATH . '/common/page-topbar.html';?>
+<?php include APPLICATION_VIEWS_PATH . '/common/page_topbar.html';?>
 <div class="container">
-    <h1><a href="/mock/list?id=<?php echo $_GET['uri_id']?>" class="pull-right btn btn-default btn-sm">Back to List</a>Create A Mock Response</h1>
+    <h1><a href="javascript:history.back();" class="pull-right btn btn-default btn-sm">Back to List</a>Create A Mock Response</h1>
     <hr />
     <form class="form-horizontal" method="post" id="form-mock">
       <div class="form-group">
@@ -77,86 +77,11 @@
 
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-          <button type="button" id="btn-submit" class="btn btn-default">Create</button>
+          <button type="button" id="btn-submit-create" class="btn btn-default">Create</button>
         </div>
       </div>
     </form>
 </div>
-<script src="/static/scripts/jquery.min.js"></script>
-<script src="/static/scripts/bootstrap.min.js"></script>
-<script src="/static/scripts/bootbox.min.js"></script>
-<script type="text/javascript">
-bootbox.loading = function() {
-    return bootbox.dialog({
-        closeButton: false,
-        message: '<div class="progress progress-striped active" style="margin:0"><div class="progress-bar progress-bar-success" style="width:100%"></div></div>'
-    });
-}
-bootbox.buildJson = function(form) {
-    var o = {};
-    var a = form.serializeArray();
-    $.each(a, function () {
-        if (o[this.name] !== undefined) {
-            if (!o[this.name].push) {
-                o[this.name] = [o[this.name]];
-            }
-            o[this.name].push(this.value || '');
-        } else {
-            o[this.name] = this.value || '';
-        }
-    });
-    return o;
-}
-jQuery("#btn-add-request-query").bind('click', function() {
-    var $group = jQuery("<div />").addClass("form-group");
-    var $input_key = jQuery('<input type="text" name="request_query_key[]" placeholder="Key" />').addClass("form-control");
-    var $input_value = jQuery('<input type="text" name="request_query_value[]" placeholder="Value" />').addClass("form-control");
-    $group.append( jQuery("<div />").addClass("col-sm-2") );
-    $group.append( jQuery("<div />").addClass("col-sm-2").append($input_key) );
-    $group.append( jQuery("<div />").addClass("col-sm-4").append($input_value) );
-    jQuery("#div-request-query").after($group);
-});
-
-jQuery("#btn-add-request-post").bind('click', function() {
-    var $group = jQuery("<div />").addClass("form-group");
-    var $input_key = jQuery('<input type="text" name="request_post_key[]" placeholder="Key" />').addClass("form-control");
-    var $input_value = jQuery('<input type="text" name="request_post_value[]" placeholder="Value" />').addClass("form-control");
-    $group.append( jQuery("<div />").addClass("col-sm-2") );
-    $group.append( jQuery("<div />").addClass("col-sm-2").append($input_key) );
-    $group.append( jQuery("<div />").addClass("col-sm-4").append($input_value) );
-    jQuery("#div-request-post").after($group);
-});
-
-jQuery("#btn-add-response-header").bind('click', function() {
-    var $group = jQuery("<div />").addClass("form-group");
-    var $input_key = jQuery('<input type="text" name="response_header_key[]" placeholder="Key" />').addClass("form-control");
-    var $input_value = jQuery('<input type="text" name="response_header_value[]" placeholder="Value" />').addClass("form-control");
-    $group.append( jQuery("<div />").addClass("col-sm-2") );
-    $group.append( jQuery("<div />").addClass("col-sm-2").append($input_key) );
-    $group.append( jQuery("<div />").addClass("col-sm-4").append($input_value) );
-    jQuery("#div-response-header").after($group);
-});
-
-jQuery("#btn-submit").bind('click', function() {
-    var loading = bootbox.loading();
-    jQuery.ajax({
-        type:'POST',
-        data: bootbox.buildJson( jQuery('#form-mock') ),
-        url: '/ajax/mockhandler/create',
-        dataType: 'json',
-        success: function(response) {
-            bootbox.alert(response.message, function() {
-                window.location.href='/mock/list?id=' + response.data.uri_id;
-            });
-        },
-        error: function() {
-            bootbox.alert('服务器问题，请重试');
-        },
-        complete:function() {
-            loading.modal('hide');
-        }
-    });
-});
-</script>
+<?php include APPLICATION_VIEWS_PATH . '/common/page_footscript.html';?>
 </body>
 </html>

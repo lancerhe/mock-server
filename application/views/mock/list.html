@@ -1,15 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<?php include APPLICATION_VIEWS_PATH . '/common/page-head.html';?>
+<?php include APPLICATION_VIEWS_PATH . '/common/page_head.html';?>
 <title>Control Panel</title>
 </head>
 <body>
-<?php include APPLICATION_VIEWS_PATH . '/common/page-topbar.html';?>
+<?php include APPLICATION_VIEWS_PATH . '/common/page_topbar.html';?>
 <div class="container">
     <h1>
-        <a href="/mock/create?uri_id=<?php echo $uri_id?>" class="pull-right btn btn-primary btn-sm">Create One</a>
-        <a href="/" class="pull-right btn btn-default btn-sm" style="margin-right:10px;">Back to List</a>
+        <a href="/" class="pull-right btn btn-default btn-sm">Back to List</a>
+        <a href="/mock/create?uri_id=<?php echo $uri_id?>" style="margin-right:10px;" class="pull-right btn btn-primary btn-sm">Create One</a>
         Mock Response List</h1>
     <hr />
     <div class="bs-callout bs-callout-danger" id="callout-tables-striped-ie8">
@@ -39,16 +39,6 @@
     </div>
     <?php endforeach;?>
 </div>
-<script src="/static/scripts/jquery.min.js"></script>
-<script src="/static/scripts/bootstrap.min.js"></script>
-<script src="/static/scripts/bootbox.min.js"></script>
-<script type="text/javascript">
-bootbox.loading = function() {
-    return bootbox.dialog({
-        closeButton: false,
-        message: '<div class="progress progress-striped active" style="margin:0"><div class="progress-bar progress-bar-success" style="width:100%"></div></div>'
-    });
-}
-</script>
+<?php include APPLICATION_VIEWS_PATH . '/common/page_footscript.html';?>
 </body>
 </html>
