@@ -7,6 +7,8 @@
 namespace Service;
 
 use Service\Mock\Validator;
+use Service\Uri;
+use Core\Exception\NotFoundRecordException;
 
 class Mock extends \Core_Entity {
 
@@ -193,9 +195,9 @@ class Mock extends \Core_Entity {
     public function query($id) {
         $mock  = (new \Model_Mock())->fetchRowById($id);
         if ( empty($mock) ) {
-            throw new \Core\Exception\NotFoundRecordException();
+            throw new NotFoundRecordException();
         }
-        $Uri = new \Service\Uri();
+        $Uri = new Uri();
         $Uri->query($mock['uri_id']);
         $this->init($mock, $Uri);
     }

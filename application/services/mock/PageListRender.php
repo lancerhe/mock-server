@@ -6,6 +6,12 @@
  */
 namespace Service\Mock;
 
+use Service\Mock;
+use Service\Uri;
+use Service\Mock\Output\HTTPProtocol;
+use Service\Mock\Output\Curl;
+use Service\Mock\Output\PHP;
+
 class PageListRender {
 
     protected $_Uri = null;
@@ -13,7 +19,7 @@ class PageListRender {
     protected $_mock = [];
 
     public function __construct($uri_id) {
-        $this->_Uri = new \Service\Uri();
+        $this->_Uri = new Uri();
         $this->_Uri->query($uri_id);
 
         $Model = new \Model_Mock();
@@ -22,12 +28,12 @@ class PageListRender {
 
     public function render() {
         foreach ($this->_mock as $idx => $row) {
-            $Mock = new \Service\Mock();
+            $Mock = new Mock();
             $Mock->init($row, $this->_Uri);
 
-            $ServiceHttp = new \Service\Mock\Output\HTTPProtocol($Mock);
-            $ServiceCurl = new \Service\Mock\Output\Curl($Mock);
-            $ServicePHP  = new \Service\Mock\Output\PHP($Mock);
+            $ServiceHttp = new HTTPProtocol($Mock);
+            $ServiceCurl = new Curl($Mock);
+            $ServicePHP  = new PHP($Mock);
 
             $this->_mock[$idx]['output_http'] = $ServiceHttp->output();
             $this->_mock[$idx]['output_curl'] = $ServiceCurl->output();

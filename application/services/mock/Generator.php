@@ -6,6 +6,9 @@
  */
 namespace Service\Mock;
 
+use Service\Mock;
+use Service\Uri;
+
 class Generator {
 
     public static $mock_path = '/mock';
@@ -17,7 +20,7 @@ class Generator {
     protected $_output = [];
 
     public function __construct($uri_id) {
-        $this->_Uri = new \Service\Uri();
+        $this->_Uri = new Uri();
         $this->_Uri->query($uri_id);
 
         $Model = new \Model_Mock();
@@ -26,7 +29,7 @@ class Generator {
 
     public function generate() {
         foreach ($this->_mock as $idx => $row) {
-            $Mock = new \Service\Mock();
+            $Mock = new Mock();
             $Mock->init($row, $this->_Uri);
 
             $this->__rebuild($Mock);
@@ -34,7 +37,7 @@ class Generator {
         $this->__output();
     }
 
-    private function __rebuild( \Service\Mock $Mock ) {
+    private function __rebuild( Mock $Mock ) {
         $mock = [
             "request" => [
                 "query" => $Mock->getRequestQuery(),

@@ -38,9 +38,13 @@ jQuery("#btn-submit-create").bind('click', function() {
         url: '/ajax/mockhandler/create',
         dataType: 'json',
         success: function(response) {
-            bootbox.alert(response.message, function() {
-                window.location.href='/mock/list?id=' + response.data.uri_id;
-            });
+            if (0 == response.code) {
+                bootbox.alert(response.message, function() {
+                    window.location.href='/mock/list?id=' + response.data.uri_id;
+                });
+            } else {
+                bootbox.alert(response.message);
+            }
         },
         error: function() {
             bootbox.alert('服务器问题，请重试');
@@ -59,9 +63,13 @@ jQuery("#btn-submit-save").bind('click', function() {
         url: '/ajax/mockhandler/save',
         dataType: 'json',
         success: function(response) {
-            bootbox.alert(response.message, function() {
-                window.location.reload();
-            });
+            if (0 == response.code) {
+                bootbox.alert(response.message, function() {
+                    window.location.reload();
+                });
+            } else {
+                bootbox.alert(response.message);
+            }
         },
         error: function() {
             bootbox.alert('服务器问题，请重试');
