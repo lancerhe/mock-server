@@ -54,6 +54,16 @@ class MockCreateResponseTest extends Controller {
     /**
      * @test
      */
+    public function CreateFailureWithEmptyUri() {
+        $this->setExpectedException('\Core\Exception\RequestValidateException');
+        $this->createRequest("/ajax/mockhandler/save");
+        $this->buildPost('');
+        $this->dispatch();
+    }
+
+    /**
+     * @test
+     */
     public function CreateMockResponseWithNewUri() {
         $this->createRequest("/ajax/mockhandler/create");
         $this->buildPost('/api/new/testing-1-1-1');

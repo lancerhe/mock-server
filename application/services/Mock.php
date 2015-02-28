@@ -6,6 +6,8 @@
  */
 namespace Service;
 
+use Service\Mock\Validator;
+
 class Mock extends \Core_Entity {
 
     protected $_request_method = 'GET';
@@ -199,6 +201,7 @@ class Mock extends \Core_Entity {
     }
 
     public function create() {
+        ( new Validator($this) )->validate();
         $this->_uri_id = (new \Model_Uri())->createIfNotExist($this->_uri);
         $mock_id = (new \Model_Mock())->insertRow([
             "uri_id"               => $this->_uri_id,
@@ -212,6 +215,7 @@ class Mock extends \Core_Entity {
     }
 
     public function save() {
+        ( new Validator($this) )->validate();
         $this->_uri_id = (new \Model_Uri())->createIfNotExist($this->_uri);
         $mock_id  = (new \Model_Mock())->updateRowById([
             "uri_id"               => $this->_uri_id,
