@@ -47,7 +47,7 @@ jQuery("#btn-submit-create").bind('click', function() {
             }
         },
         error: function() {
-            bootbox.alert('服务器问题，请重试');
+            bootbox.alert('Service 500');
         },
         complete:function() {
             loading.modal('hide');
@@ -72,7 +72,7 @@ jQuery("#btn-submit-save").bind('click', function() {
             }
         },
         error: function() {
-            bootbox.alert('服务器问题，请重试');
+            bootbox.alert('Service 500');
         },
         complete:function() {
             loading.modal('hide');

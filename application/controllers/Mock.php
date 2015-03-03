@@ -9,7 +9,9 @@ class Controller_Mock extends \Core\Controller\Main {
     public function IndexAction() {
         $Model = new Model_Uri();
         $list = $Model->fetchList();
+
         $this->getView()->assign('list', $list);
+        $this->getView()->assign('service_status', ( new \Service\Mock\Console() )->status());
         $this->getView()->display('mock/index.html');
     }
 

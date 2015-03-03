@@ -19,3 +19,50 @@ bootbox.buildJson = function(form) {
     });
     return o;
 }
+jQuery("#btn-service-restart").bind('click', function() {
+    var loading = bootbox.loading();
+    jQuery.ajax({
+        type:'GET',
+        url: '/ajax/mockconsole/restart',
+        dataType: 'json',
+        success: function(response) {
+            if (0 == response.code) {
+                bootbox.alert(response.message, function() {
+                    window.location.reload();
+                });
+            } else {
+                bootbox.alert(response.message);
+            }
+        },
+        error: function() {
+            bootbox.alert('Service 500');
+        },
+        complete:function() {
+            loading.modal('hide');
+        }
+    });
+});
+
+jQuery("#btn-service-start").bind('click', function() {
+    var loading = bootbox.loading();
+    jQuery.ajax({
+        type:'GET',
+        url: '/ajax/mockconsole/start',
+        dataType: 'json',
+        success: function(response) {
+            if (0 == response.code) {
+                bootbox.alert(response.message, function() {
+                    window.location.reload();
+                });
+            } else {
+                bootbox.alert(response.message);
+            }
+        },
+        error: function() {
+            bootbox.alert('Service 500');
+        },
+        complete:function() {
+            loading.modal('hide');
+        }
+    });
+});

@@ -5,3 +5,4 @@ Mock Server for http request.
     cd yourproject/
     composer install
     npm install qs
+    ln -s /usr/local/node/bin/node /usr/bin/node
