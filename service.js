@@ -63,11 +63,14 @@ MockFactor.prototype = {
             var find = true;
             for (var k = 0; k < method.length; k++) {
                 for ( var key in list[i].request[method[k]] ) {
+                    //console.log("content:" + list[i].request[method[k]][key])
                     if ( list[i].request[method[k]][key] instanceof Array ) {
                         if ( ! isContained(this.httprequest[method[k]][key], list[i].request[method[k]][key]) ) {
                             find = false;
                             continue;
                         }
+                    } else if ( list[i].request[method[k]][key] == '' ) {
+                        continue;
                     } else if ( list[i].request[method[k]][key] != this.httprequest[method[k]][key] ) {
                         find = false;
                         continue;
@@ -125,6 +128,7 @@ MockDispatcher.prototype = {
         for ( key in this.mockresponse.header ) {
             this.mockresponse.header[key] = this.replaceRequest(this.mockresponse.header[key] );
         }
+        this.mockresponse.body = this.replaceRequest(this.mockresponse.body);
     }
     , replaceRequest: function(string) {
         if ( 'string' != typeof string) {

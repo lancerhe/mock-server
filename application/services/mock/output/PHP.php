@@ -50,8 +50,9 @@ $post
 \$request  = curl_getinfo(\$ch);
 curl_close(\$ch);
 
-print_r(\$request);
-echo("Response: \$response");
+echo("Status Code: \$request['http_code']" . PHP_EOL);
+echo("Total Time: \$request['total_time']" . PHP_EOL);
+echo("Response: \$response" . PHP_EOL);
 '
 OUTPUT;
     }
