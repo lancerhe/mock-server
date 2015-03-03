@@ -11,7 +11,6 @@ class Controller_Mock extends \Core\Controller\Main {
         $list = $Model->fetchList();
 
         $this->getView()->assign('list', $list);
-        $this->getView()->assign('service_status', ( new \Service\Mock\Console() )->status());
         $this->getView()->display('mock/index.html');
     }
 

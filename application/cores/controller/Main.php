@@ -9,6 +9,11 @@ namespace Core\Controller;
 
 class Main extends \Core\Controller {
 
+    public function init() {
+        parent::init();
+        $this->getView()->assign('service_status', ( new \Service\Mock\Console() )->status());
+    }
+
     /**
      * default exception handler
      * @param  Exception  $exception

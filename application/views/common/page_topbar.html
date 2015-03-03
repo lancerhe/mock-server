@@ -3,5 +3,20 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="/">Mock Server Control Panel</a>
         </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li id="fat-menu" class="dropdown">
+                <a id="drop3" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+                Service
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
+                    <?php if ($service_status):?>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" id="btn-service-restart" href="javascript:;">Restart</a></li>
+                    <?php else:?>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" id="btn-service-start" href="javascript:;">Start</a></li>
+                    <?php endif;?>
+                </ul>
+            </li>
+        </ul>
     </div>
 </nav>
