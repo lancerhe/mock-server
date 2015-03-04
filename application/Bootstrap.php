@@ -8,6 +8,18 @@
 class Bootstrap extends \Yaf\Bootstrap_Abstract{
 
     /**
+     * Initialize config.
+     * @param  \Yaf\Dispatcher $dispatcher
+     * @return void
+     */
+    public function _initConfig( \Yaf\Dispatcher $dispatcher ) {
+        $config = $dispatcher->getApplication()->getConfig();
+        // save config to dispatcher
+        $dispatcher->config = new \Yaf\Config\Simple(array(), false);
+        $dispatcher->config->application = $config->application;
+    }
+
+    /**
      * Initialize const.
      * @param  \Yaf\Dispatcher $dispatcher
      * @return void
@@ -20,21 +32,18 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract{
         define('APPLICATION_LIBRARY_PATH',  APPLICATION_PATH . '/library');
 
         define('APPLICATION_MOCKSERVER_HOST', "192.168.156.124:8096");
+        define('APPLICATION_PHPCAS_OPEN', $dispatcher->config->application->phpcas == 1 ? true : false);
     }
 
-
     /**
-     * Initialize config.
+     * Initialize plugin.
      * @param  \Yaf\Dispatcher $dispatcher
      * @return void
      */
-    public function _initConfig( \Yaf\Dispatcher $dispatcher ) {
-        $config = $dispatcher->getApplication()->getConfig();
-        // save config to dispatcher
-        $dispatcher->config = new \Yaf\Config\Simple(array(), false);
-        $dispatcher->config->application = $config->application;
+    public function _initPlugin( \Yaf\Dispatcher  $dispatcher) {
+        if ( APPLICATION_PHPCAS_OPEN )
+            $dispatcher->registerPlugin( new Plugin_User() );
     }
-
 
     /**
      * Initialize autoload library, like Core_Controller, Http_Request_Curl.

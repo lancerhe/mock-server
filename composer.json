@@ -1,6 +1,7 @@
 {
     "require": {
-        "catfan/medoo": "dev-master"
+        "catfan/medoo": "dev-master", 
+        "jasig/phpcas": "1.3.*@dev"
     }
     , "minimum-stability": "stable"
 }

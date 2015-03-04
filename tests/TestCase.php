@@ -52,6 +52,7 @@ namespace YafUnit\TestCase;
 class Controller extends \YafUnit\TestCase {
 
     public function createRequest($uri) {
+        \Util_Phpcas::setUser('utest');
         $this->_request = new \YafUnit\Request\Http($uri);
     }
 
