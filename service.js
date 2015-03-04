@@ -96,7 +96,7 @@ MockFactor.prototype = {
         var dispatcher = new MockDispatcher( this.httprequest, this.mockconfig );
         var self = this;
         this.response.setTimeout(dispatcher.getMockResponse().delay, function() {
-            dispatcher.replaceKeyword();
+            dispatcher.replaceResponse();
             self.response.statusCode = dispatcher.getMockResponse().statusCode;
 
             for( key in dispatcher.getMockResponse().header ) {
@@ -124,30 +124,50 @@ MockDispatcher.prototype = {
     , getMockResponse: function() {
         return this.mockresponse;
     }
-    , replaceKeyword: function() {
-        for ( key in this.mockresponse.header ) {
-            this.mockresponse.header[key] = this.replaceRequest(this.mockresponse.header[key] );
-        }
-        this.mockresponse.body = this.replaceRequest(this.mockresponse.body);
+    , regexMatches: function(string) {
+        return string.match(/{\$[a-zA-Z1-9_.]*}/g);
     }
-    , replaceRequest: function(string) {
-        if ( 'string' != typeof string) {
+    , parseMatch: function(keyword) {
+        return keyword.replace("{$", "").replace("}", "").split('.');
+    }
+    , replaceResponse: function() {
+        this.replaceResponseHeader();
+        this.replaceResponseBody();
+    }
+    , replaceResponseHeader: function() {
+        for ( key in this.mockresponse.header ) {
+            this.replaceResponseHeaderValue(key);
+        }
+    }
+    , replaceResponseHeaderValue: function(key) {
+        var matches = this.regexMatches( this.mockresponse.header[key] );
+        for (m in matches)
+            this.mockresponse.header[key] = this.replaceKeyword(this.mockresponse.header[key], matches[m]);
+    }
+    , replaceResponseBody: function() {
+        var matches = this.regexMatches( this.mockresponse.body );
+        for (m in matches) 
+            this.mockresponse.body = this.replaceKeyword(this.mockresponse.body, matches[m] );
+    }
+    , replaceKeyword: function(string, keyword) {
+        var string = this.replaceKeywordByRequest(string, keyword);
+        return this.replaceKeywordBySystem(string, keyword);
+    }
+    , replaceKeywordBySystem: function(string, keyword) {
+        var match = this.parseMatch(keyword);
+        if ( 'system' != match[0] ) {
             return string;
         }
-
-        var regex   = /{\$[a-zA-Z1-9_.]*}/g;
-        var matches = string.match(regex);
-        for (m in matches) {
-            var keyword = matches[m];
-            string = this.replaceRequestKeyword(string, keyword)
+        if ( 'timestamp' == match[1] ) {
+            string = string.replace(keyword, (new Date()).valueOf() );
         }
         return string;
     }
-    , replaceRequestKeyword: function(string, keyword) {
-        var match = keyword.replace("{$", "").replace("}", "").split('.');
+    , replaceKeywordByRequest: function(string, keyword) {
+        var match = this.parseMatch(keyword);
         var method = ['query', 'post'];
 
-        if ( match[0] != 'request' ) {
+        if ( 'request' != match[0] ) {
             return string;
         }
 
