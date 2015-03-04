@@ -6,6 +6,16 @@
  */
 class Controller_MockHandler extends \Core\Controller\Ajax {
 
+    public function GenerateAction() {
+        $Model = new Model_Uri();
+        $list = $Model->fetchList();
+        foreach ($list as $uri_id => $uri) {
+            $ServiceGenerator = new \Service\Mock\Generator($uri_id);
+            $ServiceGenerator->generate();
+        }
+        $this->getView()->displayAjax("Generate Successfully.");
+    }
+
     public function CreateAction() {
         $uri                   = $this->getRequest()->getPost('uri');
         $timeout               = $this->getRequest()->getPost('timeout');
@@ -26,9 +36,10 @@ class Controller_MockHandler extends \Core\Controller\Ajax {
         $Mock->setResponseBody($response_body);
         $Mock->setResponseStatusCode($response_status_code);
         $Mock->setTimeout($timeout);
+        $Mock->setUser(\Service\Account::getUser());
         $Mock->create();
 
-        $ServiceGenerator = new \Service\Mock\Generator($Mock->getUriId(), \Service\Account::getUser());
+        $ServiceGenerator = new \Service\Mock\Generator($Mock->getUriId());
         $ServiceGenerator->generate();
 
         $this->getView()->displayAjax("Create Successfully.", ["uri_id" => $Mock->getUriId()]);
@@ -59,7 +70,7 @@ class Controller_MockHandler extends \Core\Controller\Ajax {
         $Mock->setTimeout($timeout);
         $Mock->save();
 
-        $ServiceGenerator = new \Service\Mock\Generator($Mock->getUriId(), \Service\Account::getUser());
+        $ServiceGenerator = new \Service\Mock\Generator($Mock->getUriId());
         $ServiceGenerator->generate();
 
         $this->getView()->displayAjax("Save Successfully.");

@@ -20,7 +20,7 @@ class MockCreateResponseTest extends Controller {
 
     public function setUpGenerateMockFolder() {
         \Service\Mock\Generator::$mock_path = '/mocktest';
-        $this->_user_folder = '/utest';
+        $this->_user_folder = APPLICATION_PHPCAS_OPEN ? '/utest' : '/nobody';
     }
 
     public function buildPost($uri) {

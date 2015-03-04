@@ -20,23 +20,31 @@ class Generator {
 
     protected $_output = [];
 
-    public function __construct($uri_id, $user) {
+    public function __construct($uri_id) {
         $this->_Uri = new Uri();
         $this->_Uri->query($uri_id);
 
         $Model = new \Model_Mock();
-        $this->_user = $user;
-        $this->_mock = $Model->fetchListByUriIdAndUser($uri_id, $user);
+        $list = $Model->fetchListByUriId($uri_id);
+        foreach ($list as $mock) {
+            $this->_mock[$mock['user']][] = $mock;
+        }
     }
 
     public function generate() {
-        foreach ($this->_mock as $idx => $row) {
+        foreach ($this->_mock as $user => $list) 
+            $this->__generate($list, $user);
+    }
+
+    private function __generate($list, $user) {
+        $this->_output = [];
+        foreach ($list as $idx => $row) {
             $Mock = new Mock();
             $Mock->init($row, $this->_Uri);
 
             $this->__rebuild($Mock);
         }
-        $this->__output();
+        $this->__output($user);
     }
 
     private function __rebuild( Mock $Mock ) {
@@ -59,10 +67,9 @@ class Generator {
         $this->_output[] = $mock;
     }
 
-    private function __output() {
+    private function __output($user) {
         $output = "exports.mock = " . json_encode($this->_output, JSON_PRETTY_PRINT);
-        $user_folder = $this->_user ? "/" . $this->_user : '';
-        $output_file = ROOT_PATH . self::$mock_path . $user_folder . $this->_Uri->getUri() . ".js";
+        $output_file = ROOT_PATH . self::$mock_path . "/" . $user . $this->_Uri->getUri() . ".js";
         $dirname = pathinfo($output_file)['dirname'];
         if ( ! is_dir( $dirname) ) mkdir($dirname, 0775, true);
         file_put_contents($output_file, $output);

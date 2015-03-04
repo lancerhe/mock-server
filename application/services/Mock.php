@@ -85,6 +85,9 @@ class Mock extends \Core_Entity {
     }
 
     public function isOwner() {
+        if ( ! APPLICATION_PHPCAS_OPEN ) {
+            return true;
+        }
         return $this->_user == Account::getUser();
     }
 
@@ -92,8 +95,8 @@ class Mock extends \Core_Entity {
         return $this->_uri_id;
     }
 
-    public function setUser($user) {
-        $this->_user = $user;
+    public function setUser($user='') {
+        $this->_user = $user ? $user : 'nobody';
     }
 
     public function setRequestQuery($request_query) {
@@ -244,7 +247,7 @@ class Mock extends \Core_Entity {
             "response_status_code" => $this->_response_status_code,
             "response_body"        => $this->_response_body,
             "timeout"              => $this->_timeout,
-            "user"                 => Account::getUser(),
+            "user"                 => $this->_user,
         ];
         $mock_id = (new \Model_Mock())->insertRow($create_row);
     }
@@ -260,7 +263,6 @@ class Mock extends \Core_Entity {
             "response_status_code" => $this->_response_status_code,
             "response_body"        => $this->_response_body,
             "timeout"              => $this->_timeout,
-            "user"                 => Account::getUser(),
         ];
         $mock_id  = (new \Model_Mock())->updateRowById($update_row, $this->_id);
     }
