@@ -6,6 +6,11 @@
         <ul class="nav navbar-nav navbar-right">
             <li id="fat-menu" class="dropdown">
                 <a id="drop3" href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="false">
+                    <?php if ($service_status):?>
+                <span class="glyphicon glyphicon-ok-circle"></span>
+                    <?php else:?>
+                <span class="glyphicon glyphicon-remove-circle"></span>
+                    <?php endif;?>
                 Service
                     <span class="caret"></span>
                 </a>
