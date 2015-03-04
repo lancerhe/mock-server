@@ -31,8 +31,8 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract{
         define('APPLICATION_SERVICES_PATH', APPLICATION_PATH . '/services');
         define('APPLICATION_LIBRARY_PATH',  APPLICATION_PATH . '/library');
 
-        define('APPLICATION_MOCKSERVER_HOST', "192.168.156.124:8096");
-        define('APPLICATION_PHPCAS_OPEN', $dispatcher->config->application->phpcas == 1 ? true : false);
+        define('APPLICATION_MOCKSERVER_HOST', $dispatcher->config->application->server_host);
+        define('APPLICATION_PHPCAS_OPEN',     $dispatcher->config->application->phpcas == 1 ? true : false);
     }
 
     /**
