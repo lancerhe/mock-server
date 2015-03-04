@@ -7,6 +7,7 @@
 Class Plugin_User extends \Yaf\Plugin_Abstract {
 
     public function dispatchLoopStartup(\Yaf\Request_Abstract $request, \Yaf\Response_Abstract $response) {
-        $user = Util_Phpcas::isAuthenticated();
+        if ( ! \Util_Phpcas::isAuthenticated() )
+            \Util_Phpcas::login();
     }
 }
