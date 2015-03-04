@@ -29,7 +29,7 @@ OUTPUT;
     }
 
     protected function _buildRequestUrl() {
-        $url = "http://" . APPLICATION_MOCKSERVER_HOST . $this->_Mock->getUri();
+        $url = "http://" . APPLICATION_MOCKSERVER_HOST . $this->_Mock->getUserUri();
         $request_query = $this->_Mock->getRequestQuery();
         if ( ! empty( $request_query ) ) {
             $url .= "?" . http_build_query( $request_query );

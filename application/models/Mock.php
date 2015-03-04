@@ -12,6 +12,12 @@ Class Model_Mock extends \Core\Model\Medoo {
         return $rows;
     }
 
+    public function fetchListByUriIdAndUser($uri_id, $user = '') {
+        $rows = $this->medoo()->select('mock', '*', ['AND' => ['uri_id' => $uri_id, 'user' => $user] ]);
+        $rows = \Util_Array::column($rows, null, 'id');
+        return $rows;
+    }
+
     public function fetchRowById($id) {
         $rows = $this->medoo()->select('mock', '*', ['id' => $id]);
         return isset($rows[0]) ? $rows[0] : [];

@@ -8,6 +8,7 @@ namespace Service\Mock;
 
 use Service\Mock;
 use Service\Uri;
+use Service\Account;
 
 class Generator {
 
@@ -19,12 +20,13 @@ class Generator {
 
     protected $_output = [];
 
-    public function __construct($uri_id) {
+    public function __construct($uri_id, $user) {
         $this->_Uri = new Uri();
         $this->_Uri->query($uri_id);
 
         $Model = new \Model_Mock();
-        $this->_mock  = $Model->fetchListByUriId($uri_id);
+        $this->_user = $user;
+        $this->_mock = $Model->fetchListByUriIdAndUser($uri_id, $user);
     }
 
     public function generate() {
@@ -59,7 +61,8 @@ class Generator {
 
     private function __output() {
         $output = "exports.mock = " . json_encode($this->_output, JSON_PRETTY_PRINT);
-        $output_file = ROOT_PATH. self::$mock_path . $this->_Uri->getUri() . ".js";
+        $user_folder = $this->_user ? "/" . $this->_user : '';
+        $output_file = ROOT_PATH . self::$mock_path . $user_folder . $this->_Uri->getUri() . ".js";
         $dirname = pathinfo($output_file)['dirname'];
         if ( ! is_dir( $dirname) ) mkdir($dirname, 0775, true);
         file_put_contents($output_file, $output);

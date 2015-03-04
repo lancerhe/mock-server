@@ -8,7 +8,9 @@ namespace Service;
 
 use Service\Mock\Validator;
 use Service\Uri;
+use Service\Account;
 use Core\Exception\NotFoundRecordException;
+use Core\Exception\RequestPermissionException;
 
 class Mock extends \Core_Entity {
 
@@ -23,6 +25,8 @@ class Mock extends \Core_Entity {
     protected $_response_header = [];
 
     protected $_response_body = '';
+
+    protected $_user = '';
 
     protected $_uri = '';
 
@@ -68,8 +72,28 @@ class Mock extends \Core_Entity {
         return $this->_uri;
     }
 
+    public function getUserFolder() {
+        return $this->_user ? ("/" . $this->_user ) : "";
+    }
+
+    public function getUserUri() {
+        return $this->getUserFolder() . $this->_uri;
+    }
+
+    public function getUser() {
+        return $this->_user;
+    }
+
+    public function isOwner() {
+        return $this->_user == Account::getUser();
+    }
+
     public function getUriId() {
         return $this->_uri_id;
+    }
+
+    public function setUser($user) {
+        $this->_user = $user;
     }
 
     public function setRequestQuery($request_query) {
@@ -187,6 +211,7 @@ class Mock extends \Core_Entity {
         $this->setRequestQuery($mock['request_query']);
         $this->setRequestPost($mock['request_post']);
         $this->setTimeout($mock['timeout']);
+        $this->setUser($mock['user']);
         $this->setUri($Uri->getUri());
         $this->setUriId($Uri->getId());
         $this->_id = $mock['id'];
@@ -202,10 +227,16 @@ class Mock extends \Core_Entity {
         $this->init($mock, $Uri);
     }
 
+    public function filterOwner() {
+        if ( ! $this->isOwner() ) {
+            throw new RequestPermissionException();
+        }
+    }
+
     public function create() {
         ( new Validator($this) )->validate();
         $this->_uri_id = (new \Model_Uri())->createIfNotExist($this->_uri);
-        $mock_id = (new \Model_Mock())->insertRow([
+        $create_row = [
             "uri_id"               => $this->_uri_id,
             "request_query"        => json_encode($this->_request_query),
             "request_post"         => json_encode($this->_request_post),
@@ -213,13 +244,15 @@ class Mock extends \Core_Entity {
             "response_status_code" => $this->_response_status_code,
             "response_body"        => $this->_response_body,
             "timeout"              => $this->_timeout,
-        ]);
+            "user"                 => Account::getUser(),
+        ];
+        $mock_id = (new \Model_Mock())->insertRow($create_row);
     }
 
     public function save() {
         ( new Validator($this) )->validate();
         $this->_uri_id = (new \Model_Uri())->createIfNotExist($this->_uri);
-        $mock_id  = (new \Model_Mock())->updateRowById([
+        $update_row = [
             "uri_id"               => $this->_uri_id,
             "request_query"        => json_encode($this->_request_query),
             "request_post"         => json_encode($this->_request_post),
@@ -227,6 +260,8 @@ class Mock extends \Core_Entity {
             "response_status_code" => $this->_response_status_code,
             "response_body"        => $this->_response_body,
             "timeout"              => $this->_timeout,
-        ], $this->_id);
+            "user"                 => Account::getUser(),
+        ];
+        $mock_id  = (new \Model_Mock())->updateRowById($update_row, $this->_id);
     }
 }

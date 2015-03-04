@@ -28,7 +28,7 @@ class Controller_MockHandler extends \Core\Controller\Ajax {
         $Mock->setTimeout($timeout);
         $Mock->create();
 
-        $ServiceGenerator = new \Service\Mock\Generator($Mock->getUriId());
+        $ServiceGenerator = new \Service\Mock\Generator($Mock->getUriId(), \Service\Account::getUser());
         $ServiceGenerator->generate();
 
         $this->getView()->displayAjax("Create Successfully.", ["uri_id" => $Mock->getUriId()]);
@@ -49,6 +49,7 @@ class Controller_MockHandler extends \Core\Controller\Ajax {
 
         $Mock = new \Service\Mock();
         $Mock->query($id);
+        $Mock->filterOwner();
         $Mock->setUri($uri);
         $Mock->setRequestQueryByKeyAndValue($request_query_key, $request_query_value);
         $Mock->setRequestPostByKeyAndValue($request_post_key, $request_post_value);
@@ -58,7 +59,7 @@ class Controller_MockHandler extends \Core\Controller\Ajax {
         $Mock->setTimeout($timeout);
         $Mock->save();
 
-        $ServiceGenerator = new \Service\Mock\Generator($Mock->getUriId());
+        $ServiceGenerator = new \Service\Mock\Generator($Mock->getUriId(), \Service\Account::getUser());
         $ServiceGenerator->generate();
 
         $this->getView()->displayAjax("Save Successfully.");

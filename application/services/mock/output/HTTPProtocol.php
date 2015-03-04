@@ -25,7 +25,7 @@ class HTTPProtocol {
     }
 
     protected function _buildRequestString() {
-        $uri = $this->_Mock->getUri();
+        $uri = $this->_Mock->getUserUri();
         $request_body_string = '';
         $method        = $this->_Mock->getRequestMethod();
         $request_query = $this->_Mock->getRequestQuery();

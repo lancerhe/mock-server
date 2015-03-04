@@ -8,6 +8,7 @@ namespace Service\Mock;
 
 use Service\Mock;
 use Service\Uri;
+use Service\Account;
 use Service\Mock\Output\HTTPProtocol;
 use Service\Mock\Output\Curl;
 use Service\Mock\Output\PHP;
@@ -38,6 +39,7 @@ class PageListRender {
             $this->_mock[$idx]['output_http'] = $ServiceHttp->output();
             $this->_mock[$idx]['output_curl'] = $ServiceCurl->output();
             $this->_mock[$idx]['output_php']  = $ServicePHP->output();
+            $this->_mock[$idx]['is_owner']    = $Mock->isOwner();
         }
     }
 

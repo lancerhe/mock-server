@@ -19,7 +19,7 @@ class Curl {
     public function output() {
         $request_query = $this->_Mock->getRequestQuery();
         $request_post  = $this->_Mock->getRequestPost();
-        $uri = "http://" . APPLICATION_MOCKSERVER_HOST . $this->_Mock->getUri();
+        $uri = "http://" . APPLICATION_MOCKSERVER_HOST . $this->_Mock->getUserUri();
         if ( ! empty( $request_query ) ) {
             $uri .= "?" . http_build_query( $request_query );
         }

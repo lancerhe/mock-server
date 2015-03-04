@@ -35,6 +35,7 @@ class Controller_Mock extends \Core\Controller\Main {
 
         $Mock = new \Service\Mock();
         $Mock->query($id);
+        $Mock->filterOwner();
         $this->getView()->assign('response_header',      $Mock->getResponseHeader() );
         $this->getView()->assign('response_body',        $Mock->getResponseBody() );
         $this->getView()->assign('response_status_code', $Mock->getResponseStatusCode() );

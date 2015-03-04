@@ -20,6 +20,7 @@ class MockCreateResponseTest extends Controller {
 
     public function setUpGenerateMockFolder() {
         \Service\Mock\Generator::$mock_path = '/mocktest';
+        $this->_user_folder = '/utest';
     }
 
     public function buildPost($uri) {
@@ -37,7 +38,7 @@ class MockCreateResponseTest extends Controller {
     }
 
     public function getMockContent($uri) {
-        return file_get_contents(ROOT_PATH . \Service\Mock\Generator::$mock_path . $uri . ".js");
+        return file_get_contents(ROOT_PATH . \Service\Mock\Generator::$mock_path . $this->_user_folder . $uri . ".js");
     }
 
     public function fetchCreateMock() {
