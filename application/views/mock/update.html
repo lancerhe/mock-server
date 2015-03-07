@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <?php include APPLICATION_VIEWS_PATH . '/common/page_head.html';?>
-<title>Control Panel</title>
+<title>Edit Mock Response - Control Panel</title>
 </head>
 <body>
 <?php include APPLICATION_VIEWS_PATH . '/common/page_topbar.html';?>
@@ -10,6 +10,13 @@
     <h1>
       <a href="/mock/list?id=<?php echo $uri_id?>" class="pull-right btn btn-default btn-sm">Back to List</a>
       <a href="/mock/create" style="margin-right:10px;" class="pull-right btn btn-primary btn-sm">Create One</a>Edit Mock Response</h1>
+    <div class="bs-callout bs-callout-info" id="callout-tables-striped-ie8">
+        <h4>Tips:</h4>
+        <ul>
+          <li>Use http request params in response header or body. ex: <code>$request.post.user</code>, <code>$request.query.tid</code></li>
+          <li>Use system value in response header or body. ex: <code>$system.timestamp</code></li>
+        </ul>
+    </div>
     <hr />
     <form class="form-horizontal" method="post" id="form-mock">
       <input type="hidden" name="id" value="<?php echo $id?>" />

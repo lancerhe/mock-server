@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <?php include APPLICATION_VIEWS_PATH . '/common/page_head.html';?>
-<title>Control Panel</title>
+<title>List Mock Respsone - Control Panel</title>
 </head>
 <body>
 <?php include APPLICATION_VIEWS_PATH . '/common/page_topbar.html';?>
@@ -16,8 +16,6 @@
         <h4>List mock responses for &lt;<mark><?php echo $uri;?></mark>&gt;</h4>
         <p>Please test the example which in panel.</p>
     </div>
-        <h3></h3>
-    </blockquote>
 
     <?php foreach ($list as $mock) :?>
     <ul data-role="tab" class="nav nav-tabs">
