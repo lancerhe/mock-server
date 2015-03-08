@@ -1,8 +1,8 @@
 /composer.phar
 /composer.lock
 /vendor/
-/mock/
-/node_modules/
+/node/mock/
+/node/node_modules/
 /application/config/phpcas.ini
 
 # Commit your application's lock file http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file

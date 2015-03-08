@@ -38,7 +38,7 @@ class MockCreateResponseTest extends Controller {
     }
 
     public function getMockContent($uri) {
-        return file_get_contents(ROOT_PATH . \Service\Mock\Generator::$mock_path . $this->_user_folder . $uri . ".js");
+        return file_get_contents(APPLICATION_NODE_PATH . \Service\Mock\Generator::$mock_path . $this->_user_folder . $uri . ".js");
     }
 
     public function fetchCreateMock() {
@@ -226,6 +226,6 @@ class MockCreateResponseTest extends Controller {
 
     public function tearDown() {
         parent::tearDown();
-        shell_exec("rm -rf " . ROOT_PATH . "/mocktest");
+        shell_exec("rm -rf " . APPLICATION_NODE_PATH . "/mocktest");
     }
 }

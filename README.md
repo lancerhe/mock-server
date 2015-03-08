@@ -4,7 +4,9 @@ Mock Server for http request.
 # quick start
     cd yourproject/
     composer install
+    cd node/
     npm install qs
+    mkdir mock
     ln -s /usr/local/node/bin/node /usr/bin/node
 
 # open phpcas

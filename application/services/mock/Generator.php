@@ -69,7 +69,7 @@ class Generator {
 
     private function __output($user) {
         $output = "exports.mock = " . json_encode($this->_output, JSON_PRETTY_PRINT);
-        $output_file = ROOT_PATH . self::$mock_path . "/" . $user . $this->_Uri->getUri() . ".js";
+        $output_file = APPLICATION_NODE_PATH . self::$mock_path . "/" . $user . $this->_Uri->getUri() . ".js";
         $dirname = pathinfo($output_file)['dirname'];
         if ( ! is_dir( $dirname) ) mkdir($dirname, 0775, true);
         file_put_contents($output_file, $output);
