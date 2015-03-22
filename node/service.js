@@ -1,7 +1,9 @@
-var url  = require('url'),
-    http = require('http'),
-    fs = require('fs'),
-    qs = require('qs');
+var url  = require('url')
+    , http = require('http')
+    , fs = require('fs')
+    , qs = require('qs')
+    , cp    = require('child_process')
+    , mysql = require('mysql');
 
 function isContained(a, b) {
     if ( ! (a instanceof Array) || !(b instanceof Array)) return false;
@@ -12,6 +14,12 @@ function isContained(a, b) {
     }
     return true;
 }
+
+var cmd = "/usr/local/php/bin/php -r \"echo json_encode((new Yaf\\Config\\Ini('../application/config/database.ini', Yaf\\ENVIRON))->toArray());\"";
+var config = null;
+cp.exec(cmd, {}, function(err, stdout, stderr) {
+    config = JSON.parse(stdout);
+});
 
 MockFactor = function( request, response ) {
     this.request  = request;
@@ -104,6 +112,19 @@ MockFactor.prototype = {
             }
             self.response.write( dispatcher.getMockResponse().body );
             self.response.end();
+
+            var c_ip     = self.request.connection.remoteAddress
+                , c_time = Math.floor( (new Date()).valueOf() / 1000 )
+                , c_url  = self.request.url;
+            var connection = mysql.createConnection({
+                host     : config.database.server,
+                user     : config.database.username,
+                password : config.database.password,
+                port     : config.database.port,
+                database : config.database.name
+            });
+            connection.query("INSERT INTO stat (uri, ip, time) VALUES('"+c_url+"', '"+c_ip+"', '"+ c_time +"')");
+            connection.end();
         });
     }
 }

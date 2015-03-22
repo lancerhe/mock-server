@@ -18,11 +18,11 @@ class Medoo extends \Core\Model {
             return self::$Medoo;
         }
 
-        $config = new \Yaf\Config\Ini( APPLICATION_CONFIG_PATH . '/mysql.ini', \Yaf\ENVIRON);
+        $config = (new \Yaf\Config\Ini( APPLICATION_CONFIG_PATH . '/database.ini', \Yaf\ENVIRON))->database;
 
         self::$Medoo = new \Medoo([
-            'database_type' => $config->database_type,
-            'database_name' => $config->database_name,
+            'database_type' => $config->type,
+            'database_name' => $config->name,
             'server'        => $config->server,
             'username'      => $config->username,
             'password'      => $config->password,
