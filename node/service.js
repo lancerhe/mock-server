@@ -15,7 +15,7 @@ function isContained(a, b) {
     return true;
 }
 
-var cmd = "/usr/local/php/bin/php -r \"echo json_encode((new Yaf\\Config\\Ini('../application/config/database.ini', Yaf\\ENVIRON))->toArray());\"";
+var cmd = "/usr/local/bin/php -r \"echo json_encode((new Yaf\\Config\\Ini('../application/config/database.ini', Yaf\\ENVIRON))->toArray());\"";
 var config = null;
 cp.exec(cmd, {}, function(err, stdout, stderr) {
     config = JSON.parse(stdout);

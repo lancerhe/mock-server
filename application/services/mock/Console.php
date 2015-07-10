@@ -19,7 +19,7 @@ class Console {
         if ( $this->status() ) 
             throw new \Core\Exception("Mock service is running.");
 
-        popen("cd ".APPLICATION_NODE_PATH." && nohup node service.js >> nohup.out & echo $!", 'r');
+        popen("cd ".APPLICATION_NODE_PATH." && nohup /usr/local/bin/node service.js >> nohup.out & echo $!", 'r');
         if ( ! $this->status() ) 
             throw new \Core\Exception("Mock service start failure.");
     }
