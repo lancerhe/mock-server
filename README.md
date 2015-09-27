@@ -1,24 +1,31 @@
-# mock-server
+mock-server
+===================
 Mock Server for http request.
 
-# quick start
+Quick start
+-------------
     cd yourproject/
     composer install
     cd node/
     npm install qs
     npm install mysql
     mkdir mock
-    ln -s /usr/local/node/bin/node /usr/bin/node
+    # make a symbol link.
+    ln -s /usr/local/node-0.10.4/bin/node /usr/local/bin/node
+    ln -s /usr/local/php-5.4.44/bin/php /usr/local/bin/php
 
-# open phpcas
+# if you want to open phpcas.
+```
     cd yourproject/
     echo '[common]
 cas_port = 443
 cas_version = 2.0
 cas_context = 
 cas_host = cas.your-server.com' > application/config/phpcas.ini
+```
 
-# mysql database
+Mysql database setup
+---------------
 
     DROP TABLE IF EXISTS `mock`;
     CREATE TABLE `mock` (
